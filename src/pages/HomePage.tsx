@@ -23,7 +23,7 @@ import floralStationery from '../../public/imgs/katb-ketab-stationery.jpg';
 import swansCard from '../../public/imgs/katb-ketab-closing.jpg';
 import couplePhoto from '../../public/imgs/couples.png';
 import locationImg from '../../public/imgs/WhatsApp Image 2026-08-21 at 1.11.50 AM.jpeg';
-import logoImg from '../../public/imgs/WhatsApp Image 2026-08-21 at 2.52.47 PM.jpeg';
+import logoImg from '../../public/imgs/ma.jpeg';
 
 interface ProgramItem {
   time: string;
