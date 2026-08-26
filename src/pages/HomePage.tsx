@@ -2,28 +2,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Heart, Calendar, MapPin, Clock } from 'lucide-react';
 import { gsap } from 'gsap';
 import CountdownTimer from '../components/CountdownTimer';
-import cardBgImg from '../../public/imgs/Gemini_Generated_Image_yb8w3vyb8w3vyb8w.jpg';
-import coupleImg from '../../public/imgs/ChatGPT Image Aug 20, 2026, 11_07_23 PM.png';
 import { motion } from 'framer-motion';
-
-import bgImage from '../../public/imgs/Gemini_Generated_Image_yb8w3vyb8w3vyb8w.jpg';
-
-// ── الصور المطلوبة للغلاف المتحرك ──
-import goldFrameImg from '../../public/imgs/Gemini_Generated_Image_ods-removebg-preview.png';
-import flowerImg from '../../public/imgs/flower.png';
-import glitterDustImg from '../../public/imgs/osowdsosowds-removebg-preview.png';
-import glitterClusterImg from '../../public/imgs/Gemini_Generated_Image_owdsosowdsosowds-removebg-preview.png';
-import topFlowerImg from '../../public/imgs/Gemini_Generated_Image_qsy1xrqsy1xrqsy1-removebg-preview.png';
-import bottomFlowerImg from '../../public/imgs/Gemini_Generatexrqsy1-removebg-preview.png';
-
-import bgSchedule from '../../public/imgs/22222222222.jpg';
-
-// ── باقي صور الصفحة ──
-import floralStationery from '../../public/imgs/katb-ketab-stationery.jpg';
-import swansCard from '../../public/imgs/katb-ketab-closing.jpg';
-import couplePhoto from '../../public/imgs/couples.png';
+import weddingKidsImg from '../../public/imgs/children-removebg-preview.png';
+import bgImage from '../../public/imgs/countdown.png';
+import ringsIconImg from '../../public/imgs/rings-icon.png';
+import glassIconImg from '../../public/imgs/glass-icon.png';
+import bucketIconImg from '../../public/imgs/bucket-icon.png';
+import handsHenna from '../../public/imgs/Nikah.jpg';
+import ringHand from '../../public/imgs/download (1).jpg';
+import heartsDecor from '../../public/imgs/back.png';
 import locationImg from '../../public/imgs/WhatsApp Image 2026-08-21 at 1.11.50 AM.jpeg';
-import logoImg from '../../public/imgs/ma.jpeg';
+import logoImg from '../../public/imgs/aa.png'; 
+import finalBgImage from '../../public/imgs/final.png'; 
+
 
 interface ProgramItem {
   time: string;
@@ -39,6 +30,9 @@ interface Colors {
   textMuted: string;
   borderSoft: string;
 }
+const eyebrowFont = "'Jost', sans-serif";
+
+const bodyFont = "'Cormorant Garamond', serif";
 
 const programItems: ProgramItem[] = [
   { 
@@ -58,6 +52,41 @@ const programItems: ProgramItem[] = [
   },
 ];
 
+
+const Reveal: React.FC<{ children: React.ReactNode; delay?: number; style?: React.CSSProperties }> = ({
+  children,
+  delay = 0,
+  style = {},
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { setVisible(true); obs.unobserve(el); } }),
+      { threshold: 0.15 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(26px)',
+        transition: `opacity 1s ease ${delay}s, transform 1s ease ${delay}s`,
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
 const StationeryCard: React.FC<{
   bg?: string;
   maxWidth?: number;
@@ -71,7 +100,7 @@ const StationeryCard: React.FC<{
       maxWidth: `${maxWidth}px`,
       margin: '0 auto',
       aspectRatio: '675 / 1350',
-      borderRadius: '18px',
+      // borderRadius: '18px',
       overflow: 'hidden',
       boxShadow: '0 18px 45px rgba(44,33,26,0.16)',
       ...(bg && {
@@ -153,7 +182,7 @@ const HomePage: React.FC = () => {
     return () => ctx.revert();
   }, [isOpened]);
 
-  const weddingDate: string = '2026-09-06T18:00:00';
+  const weddingDate: string = '2026-09-01T18:00:00';
 
   const colors: Colors = {
     bgLight: '#FAF6EF',
@@ -162,814 +191,1141 @@ const HomePage: React.FC = () => {
     accent: '#B8945F',
     textMuted: '#8C7A66',
     borderSoft: 'rgba(59, 47, 38, 0.12)',
+  
+    
+
   };
 
   return (
     <div
       className="relative"
       style={{
-        fontFamily: "'Noto Naskh Arabic', serif",
+        fontFamily: "'Caveat', cursive",
         background: colors.bgLight,
         color: colors.primary,
         direction: 'rtl',
         overflowX: 'hidden',
       }}
     >
-      {/* ── Curtain Overlay ── */}
-      <motion.div
-        initial={{ opacity: 1 }}
-        animate={{ opacity: isOpened ? 0 : 1, pointerEvents: isOpened ? 'none' : 'auto' }}
-        transition={{ duration: 0.8, delay: 0.8 }}
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 9999,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-        }}
-      >
-        <motion.div
-          animate={{ x: isOpened ? '-100%' : '0%' }}
-          transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1] }}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '50%',
-            height: '100%',
-            backgroundColor: '#FAF6EF',
-            borderRight: '1px solid rgba(184,148,95,0.3)',
-            boxShadow: '10px 0 30px rgba(0,0,0,0.1)',
-            zIndex: 1,
-          }}
-        />
-
-        <motion.div
-          animate={{ x: isOpened ? '100%' : '0%' }}
-          transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1] }}
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            width: '50%',
-            height: '100%',
-            backgroundColor: '#FAF6EF',
-            borderLeft: '1px solid rgba(184,148,95,0.3)',
-            boxShadow: '-10px 0 30px rgba(0,0,0,0.1)',
-            zIndex: 1,
-          }}
-        />
-
-        <motion.div
-          animate={{ scale: isOpened ? 0 : 1, opacity: isOpened ? 0 : 1 }}
-          transition={{ duration: 0.4 }}
-          onClick={() => setIsOpened(true)}
-          style={{
-            position: 'relative',
-            zIndex: 2,
-            cursor: 'pointer',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '12px',
-          }}
-        >
-          <div
-            style={{
-              width: '130px',
-              height: '130px',
-              borderRadius: '50%',
-              backgroundColor: '#FFFFFF',
-              boxShadow: '0 10px 30px rgba(184,148,95,0.35)',
-              // border: '2px solid #B8945F',
-              padding: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'transform 0.3s ease',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-          >
-            <img
-              src={logoImg}
-              alt="M & A Logo"
-              style={{
-                width: '100%',
-                height: '100%',
-                borderRadius: '50%',
-                objectFit: 'cover',
-              }}
-            />
-          </div>
-
-          <span
-            style={{
-              fontFamily: "'Montserrat', sans-serif",
-              fontSize: '12px',
-              letterSpacing: '2px',
-              color: '#B8945F',
-              fontWeight: 600,
-              textTransform: 'uppercase',
-            }}
-          >
-            Tap to Open
-          </span>
-        </motion.div>
-      </motion.div>
-
-      {/* ── Hero Section ── */}
-      <section
-        ref={heroCardRef}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: colors.bgLight,
-          position: 'relative',
-        }}
-      >
-        <StationeryCard style={{ backgroundColor: colors.bgLight }}>
-          <img
-            ref={glitterDustRef}
-            src={glitterDustImg}
-            alt="Glitter Dust"
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              opacity: 0,
-              pointerEvents: 'none',
-              zIndex: 1,
-            }}
-          />
-
-          <img
-            ref={glitterClusterRef}
-            src={glitterClusterImg}
-            alt="Glitter Cluster"
-            style={{
-              position: 'absolute',
-              top: '-20px',
-              left: '-20px',
-              width: '180px',
-              opacity: 0,
-              pointerEvents: 'none',
-              zIndex: 1,
-            }}
-          />
-
-          <img
-            ref={goldFrameRef}
-            src={goldFrameImg}
-            alt="Gold Frame"
-            style={{
-              position: 'absolute',
-              top: '9%',
-              left: '10%',
-              width: '80%',
-              height: '82%',
-              objectFit: 'contain',
-              opacity: 0,
-              zIndex: 2,
-            }}
-          />
-
-          <img
-            ref={flowerRef}
-            src={flowerImg}
-            alt="Flower Corner"
-            style={{
-              position: 'absolute',
-              bottom: '5%',
-              width: '190px',
-              opacity: 0,
-              zIndex: 3,
-              transformOrigin: 'bottom right',
-            }}
-          />
-
-          {[10, 30, 50, 70, 88].map((left: number, i: number) => (
-            <div
-              key={i}
-              style={{
-                position: 'absolute',
-                left: `${left}%`,
-                top: '-20px',
-                fontSize: i % 2 === 0 ? '14px' : '11px',
-                color: colors.accent,
-                opacity: 0.22,
-                animation: `fall ${7 + i}s linear infinite`,
-                animationDelay: `${i * 0.9}s`,
-                userSelect: 'none',
-                pointerEvents: 'none',
-                zIndex: 2,
-              }}
-            >
-              ♥
-            </div>
-          ))}
-
-          <div
-            style={{
-              position: 'absolute',
-              top: '35%',
-              left: 0,
-              right: 0,
-              padding: '0 8%',
-              textAlign: 'center',
-              zIndex: 4,
-            }}
-          >
-            <div ref={addToTextRefs} style={{ marginBottom: '1rem', opacity: 0 }}>
-              <span
-                style={{
-                  fontSize: '12px',
-                  letterSpacing: '2px',
-                  color: colors.accent,
-                  fontWeight: 500,
-                  display: 'block',
-                  marginBottom: '10px',
-                }}
-              >
-                Save The Date
-              </span>
-            </div>
-
-            <div ref={addToTextRefs} style={{ marginBottom: '1.5rem', opacity: 0 }}>
-              <h1
-                style={{
-                  fontFamily: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-                  fontSize: '28px',
-                  fontWeight: 500,
-                  letterSpacing: '3px',
-                  color: colors.accent,
-                  margin: 0,
-                  lineHeight: 1.2,
-                }}
-              >
-                Ahmed
-              </h1>
-
-              <span
-                style={{
-                  fontFamily: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-                  fontSize: '18px',
-                  fontStyle: 'italic',
-                  fontWeight: 400,
-                  color: colors.accent,
-                  display: 'block',
-                  margin: '6px 0',
-                  opacity: 0.85,
-                }}
-              >
-                &
-              </span>
-
-              <h1
-                style={{
-                  fontFamily: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-                  fontSize: '28px',
-                  fontWeight: 500,
-                  letterSpacing: '3px',
-                  color: colors.accent,
-                  margin: 0,
-                  lineHeight: 1.2,
-                }}
-              >
-                Malak
-              </h1>
-            </div>
-
-            <div ref={addToTextRefs} style={{ opacity: 0 }}>
-              <p
-                style={{
-                  fontSize: '12px',
-                  fontStyle: 'italic',
-                  color: colors.primary,
-                  lineHeight: 1.8,
-                  fontWeight: 500,
-                }}
-              >
-                
-                Sept 6.2026
-
-              </p>
-            </div>
-          </div>
-        </StationeryCard>
-      </section>
-
-      {/* ── SECOND SECTION ── */}
-      <section style={{ background: colors.bgLight, position: 'relative' }}>
-        <StationeryCard
-          style={{
-            backgroundColor: '#F7F5F2',
-            position: 'relative',
-            overflow: 'hidden',
-            padding: 0,
-          }}
-        >
-          <motion.img
-            initial={{ opacity: 0, scale: 1.01 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: 'easeOut' }}
-            src={coupleImg}
-            alt="Ahmed & Malak"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              display: 'block',
-            }}
-          />
-
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '7%',
-              right: '65%',
-              width: '55%',
-              zIndex: 10,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px',
-              alignItems: 'flex-start',
-              textAlign: 'left',
-            }}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              style={{ paddingLeft: '5px' }}
-            >
-              <div
-                style={{
-                  fontFamily: "'Montserrat', sans-serif",
-                  fontSize: '12px',
-                  letterSpacing: '1px',
-                  color: '#222222',
-                  marginBottom: '6px',
-                  lineHeight: 1.9,
-                  fontWeight: 600,
-                  fontStyle: 'italic',
-                }}
-              >
-                A <br />Love<br />Written<br /> in the stars<br />
-                and sealed with <br /> forever
-              </div>
-            </motion.div>
-          </div>
-        </StationeryCard>
-      </section>
-
-      {/* ── THIRD SECTION ── */}
-      <section
-        dir="ltr"
-        style={{
-          position: 'relative',
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          padding: '80px 1.5rem',
-          textAlign: 'center',
-          overflow: 'hidden',
-          minHeight: '500px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundColor: 'rgba(255, 255, 255, 0.25)',
-            zIndex: 1,
-          }}
-        />
-
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: '600px', width: '100%' }}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '12px',
-              marginBottom: '30px',
-              paddingBottom: '20px',
-              borderBottom: '1px solid rgba(180, 140, 100, 0.3)',
-            }}
-          >
-            <h2
-              style={{
-                fontFamily: "'Montserrat', sans-serif",
-                fontSize: 'clamp(20px, 4vw, 26px)',
-                fontWeight: 600,
-                color: '#333333',
-                margin: '0 0 10px 0',
-                letterSpacing: '1px',
-                textTransform: 'uppercase',
-              }}
-            >
-              Save The Date
-            </h2>
-
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: '20px',
-                color: '#222222',
-                fontSize: '14px',
-                fontFamily: "'Montserrat', sans-serif",
-                fontWeight: 600,
-                letterSpacing: '0.5px',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Calendar style={{ width: '18px', height: '18px', color: '#b48c64' }} />
-                <span>SEP 06 . 2026</span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Clock style={{ width: '18px', height: '18px', color: '#b48c64' }} />
-                <span>09:00 PM</span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <MapPin style={{ width: '18px', height: '18px', color: '#b48c64' }} />
-                <span>Sandy Hall</span>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <p
-              style={{
-                fontFamily: "'Montserrat', sans-serif",
-                fontSize: '12px',
-                letterSpacing: '2px',
-                textTransform: 'uppercase',
-                color: '#666666',
-                marginBottom: '15px',
-                fontWeight: 600,
-              }}
-            >
-              COUNTDOWN
-            </p>
-            <div style={{ padding: '0 10px' }}>
-              <CountdownTimer targetDate={weddingDate} />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── LOCATION SECTION ── */}
-      <section style={{ background: colors.bgLight, padding: '0 1.5rem 60px', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: "'Noto Nastaliq Urdu', serif", fontSize: 'clamp(26px, 6vw, 34px)', color: colors.primaryDark, marginBottom: '32px', marginTop: 30 }}>
-          Location
-        </h2>
-        <div style={{ maxWidth: '420px', margin: '0 auto', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(44,33,26,0.14)' }}>
-          <img src={locationImg} alt="Location" style={{ width: '100%', height: '260px', objectFit: 'cover', display: 'block' }} />
-        </div>
-        <a
-          href="https://maps.app.goo.gl/XQy32VLRY4N3ux4K8"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            marginTop: '26px',
-            padding: '14px 32px',
-            background: colors.primaryDark,
-            color: '#fff',
-            borderRadius: '30px',
-            textDecoration: 'none',
-            fontSize: '13px',
-            fontWeight: 700,
-            boxShadow: '0 10px 28px rgba(184,148,95,0.35)',
-          }}
-        >
-          Open Location
-          <MapPin style={{ width: '16px', height: '16px' }} />
-        </a>
-      </section>
-
-      {/* ── ITINERARY SECTION ── */}
-  {/* ── ITINERARY SECTION ── */}
-      <section
-        dir="ltr"
-        style={{
-          position: 'relative',
-          backgroundColor: '#FBF8F3',
-          padding: '90px 1.5rem',
-          overflow: 'hidden',
-        }}
-      >
-        <div style={{ maxWidth: '900px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
-          {/* Header */}
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            style={{ textAlign: 'center', marginBottom: '70px' }}
-          >
-            <p
-              style={{
-                fontFamily: "'Montserrat', sans-serif",
-                fontSize: '12px',
-                letterSpacing: '4px',
-                textTransform: 'uppercase',
-                color: '#B48C64',
-                fontWeight: 600,
-                marginBottom: '8px',
-              }}
-            >
-              Itinerary
-            </p>
-            <h2
-              style={{
-                fontFamily: "'Montserrat', sans-serif",
-                fontSize: 'clamp(26px, 4vw, 36px)',
-                fontWeight: 600,
-                color: '#3B2F26',
-                margin: 0,
-                letterSpacing: '1px',
-              }}
-            >
-              Order of Events
-            </h2>
-            <div
-              style={{
-                width: '50px',
-                height: '1px',
-                background: 'linear-gradient(90deg, transparent, #C9A96E, transparent)',
-                margin: '18px auto 0',
-              }}
-            />
-          </motion.div>
-
-          {/* Events Timeline */}
-          <div style={{ position: 'relative' }}>
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '1px',
-                background: 'linear-gradient(to bottom, transparent, rgba(201, 169, 110, 0.5), transparent)',
-                zIndex: 1,
-              }}
-            />
-
-            {programItems.map((item: ProgramItem, i: number) => {
-              const timeOnLeft = i % 2 === 0;
-              return (
-                <div
-                  key={i}
-                  style={{
-                    position: 'relative',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '45px 0',
-                    minHeight: '30px',
-                  }}
-                >
-                  {/* Timeline Node */}
-                  <motion.div
-                    initial={{ scale: 0, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    style={{
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      width: '10px',
-                      height: '10px',
-                      borderRadius: '50%',
-                      background: '#B48C64',
-                      border: '3px solid #FBF8F3',
-                      boxShadow: '0 0 0 1px rgba(180,140,100,0.3)',
-                      zIndex: 3,
-                    }}
-                  />
-
-                  {/* Left Box (Fade In Left) */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.7, delay: i * 0.15 }}
-                    style={{
-                      width: '46%',
-                      display: 'flex',
-                      justifyContent: 'flex-end',
-                      textAlign: 'right',
-                      zIndex: 2,
-                    }}
-                  >
-                    {timeOnLeft ? (
-                      <span
-                        style={{
-                          fontFamily: "'Montserrat', sans-serif",
-                          fontSize: '13px',
-                          fontWeight: 700,
-                          color: '#8C6A48',
-                          letterSpacing: '2px',
-                          textTransform: 'uppercase',
-                          background: 'rgba(201, 169, 110, 0.15)',
-                          padding: '6px 18px',
-                          borderRadius: '30px',
-                          border: '1px solid rgba(201, 169, 110, 0.25)',
-                        }}
-                      >
-                        {item.time}
-                      </span>
-                    ) : (
-                      <div>
-                        <h3
-                          style={{
-                            fontFamily: "'Montserrat', sans-serif",
-                            fontSize: '19px',
-                            fontWeight: 600,
-                            color: '#3B2F26',
-                            margin: '0 0 6px 0',
-                          }}
-                        >
-                          {item.title}
-                        </h3>
-                        <p
-                          style={{
-                            fontFamily: "'Montserrat', sans-serif",
-                            fontSize: '13px',
-                            color: '#6E6158',
-                            margin: 0,
-                            lineHeight: 1.5,
-                            fontWeight: 400,
-                          }}
-                        >
-                          {item.desc}
-                        </p>
-                      </div>
-                    )}
-                  </motion.div>
-
-                  {/* Right Box (Fade In Right) */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.7, delay: i * 0.15 }}
-                    style={{
-                      width: '46%',
-                      display: 'flex',
-                      justifyContent: 'flex-start',
-                      textAlign: 'left',
-                      zIndex: 2,
-                    }}
-                  >
-                    {timeOnLeft ? (
-                      <div>
-                        <h3
-                          style={{
-                            fontFamily: "'Montserrat', sans-serif",
-                            fontSize: '19px',
-                            fontWeight: 600,
-                            color: '#3B2F26',
-                            margin: '0 0 6px 0',
-                          }}
-                        >
-                          {item.title}
-                        </h3>
-                        <p
-                          style={{
-                            fontFamily: "'Montserrat', sans-serif",
-                            fontSize: '13px',
-                            color: '#6E6158',
-                            margin: 0,
-                            lineHeight: 1.5,
-                            fontWeight: 400,
-                          }}
-                        >
-                          {item.desc}
-                        </p>
-                      </div>
-                    ) : (
-                      <span
-                        style={{
-                          fontFamily: "'Montserrat', sans-serif",
-                          fontSize: '13px',
-                          fontWeight: 700,
-                          color: '#8C6A48',
-                          letterSpacing: '2px',
-                          textTransform: 'uppercase',
-                          background: 'rgba(201, 169, 110, 0.15)',
-                          padding: '6px 18px',
-                          borderRadius: '30px',
-                          border: '1px solid rgba(201, 169, 110, 0.25)',
-                        }}
-                      >
-                        {item.time}
-                      </span>
-                    )}
-                  </motion.div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CLOSING CARD ── */}
-      <section style={{ background: colors.bgLight, position: 'relative' }}>
-        <StationeryCard bg={bgSchedule}>
-          <div
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '100%',
-              padding: '0 12%',
-              textAlign: 'center',
-            }}
-          >
-            <p
-              style={{
-                fontSize: '14px',
-                fontStyle: 'italic',
-                color: colors.accent,
-                marginBottom: '20px',
-                fontWeight: 600,
-              }}
-            >
-              Thank you for sharing in our joy and celebrating this beautiful beginning with us.
-            </p>
-
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '12px',
-                margin: '26px 0',
-              }}
-            >
-              <span style={{ width: '34px', height: '1px', background: colors.accent }} />
-              <Heart style={{ width: '16px', height: '16px', color: colors.primary, fill: colors.primary }} />
-              <span style={{ width: '34px', height: '1px', background: colors.accent }} />
-            </div>
-
-            <p style={{ fontSize: '14px', fontStyle: 'italic', color: colors.primary, marginBottom: '10px' }}>
-              With love and gratitude
-            </p>
-
-            <h2
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                fontWeight: 700,
-                fontSize: 'clamp(24px, 7vw, 30px)',
-                color: '#3B2F26',
-                lineHeight: 1.5,
-                margin: '20px 0 12px',
-              }}
-            >
-              Ahmed Shemis & Malak Essam
-            </h2>
-          </div>
-        </StationeryCard>
-      </section>
-
+      {/* ── Google Font Caveat Import ── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400..700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap');
-
-        @keyframes fall {
-          0% { transform: translateY(-20px) rotate(0deg); opacity: 0.4; }
-          100% { transform: translateY(135%) rotate(360deg); opacity: 0; }
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+        
+        * {
+          font-family: 'Caveat', cursive !important;
         }
       `}</style>
+
+      {/* ── Curtain Overlay ── */}
+     <motion.div
+  initial={{ opacity: 1 }}
+  animate={{ opacity: isOpened ? 0 : 1, pointerEvents: isOpened ? 'none' : 'auto' }}
+  transition={{ duration: 0.8, delay: 0.8 }}
+  style={{
+    position: 'fixed',
+    inset: 0,
+    zIndex: 9999,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Overlay خلفية شفافة ناعمة
+  }}
+>
+  {/* Left Door */}
+  <motion.div
+    animate={{ x: isOpened ? '-100%' : '0%' }}
+    transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1] }}
+    style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '50%',
+      height: '100%',
+      backgroundColor: '#FAF7F2',
+      borderRight: '1px solid rgba(122, 15, 29, 0.2)',
+      boxShadow: '10px 0 30px rgba(122, 15, 29, 0.15)',
+      zIndex: 1,
+      opacity: 0.96, // شفافة قليلاً لمظهر أرقّ
+    }}
+  />
+
+  {/* Right Door */}
+  <motion.div
+    animate={{ x: isOpened ? '100%' : '0%' }}
+    transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1] }}
+    style={{
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      width: '50%',
+      height: '100%',
+      backgroundColor: '#FAF7F2',
+      borderLeft: '1px solid rgba(122, 15, 29, 0.2)',
+      boxShadow: '-10px 0 30px rgba(122, 15, 29, 0.15)',
+      zIndex: 1,
+      opacity: 0.96, // شفافة قليلاً لمظهر أرقّ
+    }}
+  />
+
+  {/* Center Button / Logo */}
+  <motion.div
+    animate={{ scale: isOpened ? 0 : 1, opacity: isOpened ? 0 : 1 }}
+    transition={{ duration: 0.4 }}
+    onClick={() => setIsOpened(true)}
+    style={{
+      position: 'relative',
+      zIndex: 2,
+      cursor: 'pointer',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '14px',
+    }}
+  >
+    <div
+      style={{
+        width: '130px',
+        height: '130px',
+        borderRadius: '50%', // Rounded corners للوجو
+        backgroundColor: '#FFFFFF',
+        boxShadow: '0 12px 35px rgba(122, 15, 29, 0.25)',
+        padding: '10px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        transition: 'transform 0.3s ease',
+        border: '1px solid rgba(122, 15, 29, 0.15)',
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+      onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+    >
+      <img
+        src={logoImg}
+        alt="M & A Logo"
+        style={{
+          width: '100%',
+          height: '100%',
+          borderRadius: '50%', // Continuous curve داخلية
+          objectFit: 'cover',
+        }}
+      />
+    </div>
+
+    <span
+      style={{
+        fontFamily: "'Playfair Display', serif",
+        fontSize: '20px',
+        letterSpacing: '2px',
+        color: '#7A0F1D', // اللون البرجاندي
+        fontWeight: 700,
+        textTransform: 'uppercase',
+      }}
+    >
+      Tap to Open
+    </span>
+  </motion.div>
+</motion.div>
+
+      {/* ── Hero Section ── */}
+    <section
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: colors.bgLight,
+    position: 'relative',
+    // padding: '40px 0',
+  }}
+>
+  <StationeryCard
+    style={{
+      backgroundColor: colors.bgLight,
+      aspectRatio: 'auto',
+      minHeight: '620px',
+      paddingBottom: '50px',
+    }}
+  >
+    {/* Childhood sweethearts text */}
+    <motion.p
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1, delay: 0.4, ease: 'easeOut' }}
+      style={{
+        textAlign: 'center',
+        fontSize: '2.9rem',
+        fontWeight: 600,
+        color: '#4a4a4a',
+        marginBottom: '20px',
+        zIndex: 2,
+        position: 'relative',
+        paddingTop: '80px',
+        lineHeight: 1.2,
+      }}
+    >
+      From childhood sweethearts <br /> to forever
+    </motion.p>
+
+    {/* Kids photo */}
+    <motion.img
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1, delay: 0.6, ease: 'easeOut' }}
+      src={weddingKidsImg}
+      alt="We're Getting Married"
+      style={{
+        display: 'block',
+        width: '85%',
+        maxWidth: '360px',
+        margin: '0 auto',
+        zIndex: 2,
+        position: 'relative',
+      }}
+    />
+
+    {/* Speech bubbles */}
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '14px',
+        marginTop: '30px',
+        padding: '0 8%',
+        position: 'relative',
+        zIndex: 2,
+      }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 15, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.8, delay: 0.9, ease: 'easeOut' }}
+        style={{
+          // background: '#F3EEE6',
+          // borderRadius: '24px',
+          padding: '12px 28px',
+          // boxShadow: '0 4px 14px rgba(59,47,38,0.08)',
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
+            fontSize: '28px',
+            fontWeight: 700,
+            color: colors.primary,
+          }}
+        >
+         ? Did you find out 
+        </span>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 15, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.8, delay: 1.2, ease: 'easeOut' }}
+        style={{
+          // background: '#F3EEE6',
+          // borderRadius: '24px',
+          padding: '16px 26px',
+          // boxShadow: '0 4px 14px rgba(59,47,38,0.08)',
+          textAlign: 'center',
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: '25px',
+            fontWeight: 500,
+            color: colors.textMuted,
+            margin: 0,
+            lineHeight: 1.8,
+          }}
+        >
+          yes, it's us <br />
+         Time flew by and these two sweet kids are getting married soon
+        </p>
+      </motion.div>
+    </div>
+  </StationeryCard>
+</section>
+
+
+      {/* ── SECOND SECTION ── */}
+<section style={{ background: colors.bgLight, position: 'relative' }}>
+  <StationeryCard
+    style={{
+      backgroundColor: '#7A0F1D',
+      position: 'relative',
+      overflow: 'hidden',
+      padding: 0,
+    }}
+  >
+    {/* Decorative hearts scattered overlay */}
+    <img
+      src={heartsDecor}
+      alt=""
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        opacity: 0.9,
+        zIndex: 1,
+        pointerEvents: 'none',
+      }}
+    />
+
+    {/* Top polaroid photo, tilted right, aligned right side */}
+    <motion.div
+      initial={{ opacity: 0, rotate: 2, y: -20 }}
+      whileInView={{ opacity: 1, rotate: -6, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.9, ease: 'easeOut' }}
+      style={{
+        position: 'absolute',
+        top: '6%',
+        left: '8%',
+        width: '68%',
+        background: '#F5F0E6',
+        padding: '10px 10px 22px',
+        // boxShadow: '0 14px 28px rgba(0,0,0,0.35)',
+        zIndex: 2,
+      }}
+    >
+      <img
+        src={handsHenna}
+        alt="Ahmed & Malak"
+        style={{
+          width: '100%',
+          height: '210px',
+          objectFit: 'cover',
+          display: 'block',
+        }}
+      />
+    </motion.div>
+
+    {/* Center text "Ahmed + Malak =" with heart */}
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, delay: 0.4 }}
+      style={{
+        position: 'absolute',
+        top: '46%',
+        left: 0,
+        right: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '10px',
+        zIndex: 3,
+      }}
+    >
+      <Heart style={{ width: '26px', height: '26px', color: '#F5EFE4' }} />
+      <span
+        style={{
+          fontFamily: "'Great Vibes', cursive",
+          fontSize: '32px',
+          color: '#F5EFE4',
+        }}
+      >
+         =Amr + Aya 
+      </span>
+    </motion.div>
+
+    {/* Bottom polaroid photo, tilted left, aligned left side */}
+    <motion.div
+      initial={{ opacity: 0, rotate: -2, y: 20 }}
+      whileInView={{ opacity: 1, rotate: 5, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
+      style={{
+        position: 'absolute',
+        bottom: '6%',
+        left: '24%',
+        width: '68%',
+        background: '#F5F0E6',
+        padding: '10px 10px 22px',
+        boxShadow: '0 14px 28px rgba(0,0,0,0.35)',
+        zIndex: 2,
+      }}
+    >
+      <img
+        src={ringHand}
+        alt="Ahmed & Malak"
+        style={{
+          width: '100%',
+          height: '210px',
+          objectFit: 'cover',
+          display: 'block',
+        }}
+      />
+    </motion.div>
+  </StationeryCard>
+</section>
+
+
+
+
+
+      {/* ── THIRD SECTION: Save The Date & Countdown ── */}
+
+
+
+            <section style={{ padding: '110px 1.5rem', textAlign: 'center', background: '#FAF7F2' }}>
+  <Reveal>
+    <p style={{ fontFamily: bodyFont, fontSize: '1.8rem', lineHeight: 1.9, color: '#7A0F1D', maxWidth: '560px', margin: '0 auto 50px' }}>
+      So we invite you to share with us this joyful day when we become a family
+    </p>
+
+    <div style={{
+      maxWidth: '350px',
+      margin: '0 auto',
+      backgroundColor: '#7A0F1D',
+      padding: '28px 20px 40px',
+      borderRadius: '4px',
+      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
+      transform: 'rotate(-2deg)',
+      position: 'relative',
+      clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 12px), 96.4% 100%, 92.8% calc(100% - 12px), 89.2% 100%, 85.6% calc(100% - 12px), 82% 100%, 78.4% calc(100% - 12px), 74.8% 100%, 71.2% calc(100% - 12px), 67.6% 100%, 64% calc(100% - 12px), 60.4% 100%, 56.8% calc(100% - 12px), 53.2% 100%, 49.6% calc(100% - 12px), 46% 100%, 42.4% calc(100% - 12px), 38.8% 100%, 35.2% calc(100% - 12px), 31.6% 100%, 28% calc(100% - 12px), 24.4% 100%, 20.8% calc(100% - 12px), 17.2% 100%, 13.6% calc(100% - 12px), 10% 100%, 6.4% calc(100% - 12px), 2.8% 100%, 0 calc(100% - 12px))'
+    }}>
+
+      <p style={{
+        fontFamily: "'Playfair Display', serif",
+        fontSize: '1.8rem',
+        color: '#FAF7F2',
+        marginBottom: '24px',
+        letterSpacing: '0.03em',
+        direction: 'ltr'
+      }}>
+        September 2026
+      </p>
+
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(7, 1fr)',
+        gap: '5px',
+        marginBottom: '14px',
+        direction: 'ltr'
+      }}>
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+          <div key={day} style={{
+            fontFamily: eyebrowFont || 'sans-serif',
+            fontSize: '1.2rem',
+            color: '#FAF7F2',
+            fontWeight: '600',
+            opacity: 0.85
+          }}>
+            {day}
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(7, 1fr)',
+        gap: '8px',
+        direction: 'ltr'
+      }}>
+        {/* September 1, 2026 falls on a Tuesday → 2 empty cells (Sun, Mon) */}
+        {[...Array(2)].map((_, i) => <div key={'empty-' + i} />)}
+
+        {/* September has 30 days */}
+        {[...Array(30)].map((_, i) => {
+          const dayNumber = i + 1;
+          const isTargetDay = dayNumber === 1;
+
+          return (
+            <div key={dayNumber} style={{
+              position: 'relative',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '36px'
+            }}>
+              {isTargetDay && (
+                <Heart
+                  style={{
+                    position: 'absolute',
+                    width: '32px',
+                    height: '32px',
+                    color: '#FAF7F2',
+                    fill: '#FAF7F2',
+                    zIndex: 0,
+                  }}
+                />
+              )}
+
+              <div style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: '0.9rem',
+                color: isTargetDay ? '#7A0F1D' : '#FAF7F2',
+                zIndex: 1,
+                fontWeight: isTargetDay ? '700' : '400',
+                opacity: isTargetDay ? 1 : 0.75,
+                marginTop: isTargetDay ? '-3px' : 0,
+              }}>
+                {dayNumber}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </Reveal>
+</section>
+
+{/* Fourth Section Count Down */}
+     {/* ── SAVE THE DATE & COUNTDOWN SECTION ── */}
+<section
+  dir="ltr"
+  style={{
+    position: 'relative',
+    backgroundImage: `url(${bgImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    padding: '90px 1.5rem',
+    textAlign: 'center',
+    overflow: 'hidden',
+    minHeight: '550px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }}
+>
+  {/* Dark Overlay for contrast */}
+  <div
+    style={{
+      position: 'absolute',
+      inset: 0,
+      backgroundColor: 'rgba(50, 8, 15, 0.45)',
+      zIndex: 1,
+    }}
+  />
+
+  <div style={{ position: 'relative', zIndex: 2, maxWidth: '600px', width: '100%' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '16px',
+        marginBottom: '35px',
+      }}
+    >
+      {/* Title */}
+      <h2
+        style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: 'clamp(34px, 5vw, 48px)',
+          fontWeight: 600,
+          color: '#FAF7F2',
+          margin: 0,
+          letterSpacing: '2px',
+          textTransform: 'uppercase',
+          textShadow: '0 2px 10px rgba(0,0,0,0.3)',
+        }}
+      >
+        Save The Date
+      </h2>
+
+      {/* Date & Time Row */}
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '24px',
+          color: '#FAF7F2',
+          fontSize: '18px',
+          fontFamily: "'Montserrat', sans-serif",
+          fontWeight: 500,
+          letterSpacing: '1px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Calendar style={{ width: '20px', height: '20px', color: '#FAF7F2' }} />
+          <span>SEP 01 . 2026</span>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Clock style={{ width: '20px', height: '20px', color: '#FAF7F2' }} />
+          <span>09:00 PM</span>
+        </div>
+      </div>
+
+      {/* Location */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          color: '#FAF7F2',
+          fontSize: '19px',
+          fontFamily: "'Cormorant Garamond', serif",
+          fontStyle: 'italic',
+          fontWeight: 600,
+        }}
+      >
+        <MapPin style={{ width: '20px', height: '20px', color: '#FAF7F2' }} />
+        <span>Sandy Hall</span>
+      </div>
+    </div>
+
+    {/* Countdown Timer Component */}
+    <div style={{ marginTop: '15px' }}>
+      <CountdownTimer targetDate={weddingDate} />
+    </div>
+  </div>
+</section>
+
+
+ {/* ── FIFTH SECTION: Location Details ── */}
+    <section
+  style={{
+    background: colors.bgLight,
+    display: 'flex',
+    justifyContent: 'center',
+  }}
+>
+  <StationeryCard
+    style={{
+      backgroundColor: '#7A0F1D',
+      padding: '60px 24px 30px 24px',
+      position: 'relative',
+      overflow: 'hidden',
+    }}
+  >
+    {/* Decorative scattered hearts */}
+    {[10, 30, 55, 75, 90].map((left, i) => (
+      <Heart
+        key={i}
+        style={{
+          position: 'absolute',
+          left: `${left}%`,
+          top: `${8 + (i % 3) * 6}%`,
+          width: i % 2 === 0 ? '16px' : '12px',
+          height: i % 2 === 0 ? '16px' : '12px',
+          color: '#FAF7F2',
+          opacity: 0.25,
+          zIndex: 0,
+        }}
+      />
+    ))}
+
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        // justifyContent: 'space-between',
+        height: '100%',
+        textAlign: 'center',
+        position: 'relative',
+        zIndex: 1,
+      }}
+    >
+      <div>
+        <h2
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: '34px',
+            fontWeight: 700,
+            color: '#FAF7F2',
+            letterSpacing: '2px',
+            marginBottom: '30px',
+          }}
+        >
+          Location & Venue
+        </h2>
+
+        <div
+          style={{
+            width: '60px',
+            height: '1px',
+            background: 'rgba(250,247,242,0.5)',
+            margin: '30px auto',
+          }}
+        />
+
+        <p
+          style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: '22px',
+            fontWeight: 600,
+            letterSpacing: '1px',
+            textTransform: 'uppercase',
+            color: '#FAF7F2',
+            margin: '0 0 4px',
+          }}
+        >
+          Sandy Hall
+        </p>
+        <p
+          style={{
+            fontSize: '18px',
+            fontWeight: 600,
+            color: 'rgba(250,247,242,0.8)',
+            margin: '10px 0 14px',
+            lineHeight: 1.5,
+          }}
+        >
+          We can't wait to celebrate our special day with you at Sandy Hall.
+        </p>
+      </div>
+
+      <div
+        style={{
+          width: '80%',
+          border: '6px solid #FAF7F2',
+          overflow: 'hidden',
+          boxShadow: '0 14px 30px rgba(0,0,0,0.3)',
+          transform: 'rotate(-3deg)',
+          margin: '15px 0',
+        }}
+      >
+        <img
+          src={locationImg}
+          alt="Venue Location"
+          style={{
+            width: '100%',
+            height: '200px',
+            objectFit: 'cover',
+            filter: 'grayscale(15%)',
+            display: 'block',
+          }}
+        />
+      </div>
+
+      <a
+        href="https://maps.google.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '8px',
+          backgroundColor: 'transparent',
+          color: '#FAF7F2',
+          padding: '10px 36px',
+          border: '1px solid #FAF7F2',
+          borderRadius: '30px',
+          textDecoration: 'none',
+          fontSize: '13px',
+          fontWeight: 700,
+          letterSpacing: '2px',
+          textTransform: 'uppercase',
+          marginTop: '30px',
+        }}
+      >
+        <MapPin style={{ width: '16px', height: '16px' }} />
+        View Map
+      </a>
+    </div>
+  </StationeryCard>
+</section>
+  
+
+
+
+
+
+
+      {/* ── sixth SECTION: Event Program ── */}
+        <section 
+          dir="ltr"
+          style={{
+            background: colors.bgLight,
+            display: 'flex',
+            justifyContent: 'center',
+            // padding: '40px 0',
+          }}
+        >
+          <StationeryCard
+            style={{
+              backgroundColor: '#FAF7F2',
+              padding: '70px 30px 60px',
+              maxWidth: '480px',
+              width: '100%',
+              minHeight: '750px',
+              aspectRatio: 'unset',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Decorative Background Hearts */}
+            {[12, 85, 20, 78].map((left, i) => (
+              <Heart
+                key={i}
+                style={{
+                  position: 'absolute',
+                  left: `${left}%`,
+                  top: `${10 + i * 22}%`,
+                  width: '14px',
+                  height: '14px',
+                  color: '#7A0F1D',
+                  opacity: 0.12,
+                  zIndex: 0,
+                }}
+              />
+            ))}
+
+            {/* Header */}
+            <div style={{ textAlign: 'center', marginBottom: '60px', position: 'relative', zIndex: 1 }}>
+              <h2
+                style={{
+                  fontFamily: "'Great Vibes', cursive",
+                  fontSize: '52px',
+                  fontWeight: 400,
+                  color: '#7A0F1D',
+                  margin: '0 0 8px',
+                  letterSpacing: '1px',
+                }}
+              >
+                What Time?
+              </h2>
+              <div
+                style={{
+                  width: '60px',
+                  height: '1px',
+                  background: 'rgba(122, 15, 29, 0.3)',
+                  margin: '0 auto',
+                }}
+              />
+            </div>
+
+            {/* Creative Vertical Timeline */}
+            <div style={{ position: 'relative', padding: '20px 0', zIndex: 1 }}>
+              {/* Central Dashed Line */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '20px',
+                  bottom: '20px',
+                  left: '50%',
+                  width: '2px',
+                  transform: 'translateX(-50%)',
+                  borderLeft: '2px dashed rgba(122, 15, 29, 0.3)',
+                  zIndex: 0,
+                }}
+              />
+
+              {[
+                { item: programItems[0], icon: glassIconImg, fallbackTime: '8:30 PM' },
+                { item: programItems[1], icon: ringsIconImg, fallbackTime: '9:30 PM' },
+                { item: programItems[2], icon: bucketIconImg, fallbackTime: '10:00 PM' },
+              ].map((data, index) => {
+                const isEven = index % 2 === 0;
+                const timeText = data.item?.time || data.fallbackTime;
+                const titleText = data.item?.title || '';
+                const descText = data.item?.desc || '';
+
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginBottom: '65px',
+                      position: 'relative',
+                      zIndex: 1,
+                    }}
+                  >
+                    {/* Left Side */}
+                    <div
+                      style={{
+                        width: '42%',
+                        textAlign: isEven ? 'right' : 'center',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: isEven ? 'flex-end' : 'center',
+                      }}
+                    >
+                      {isEven ? (
+                        <div>
+                          <span
+                            style={{
+                              fontFamily: "'Playfair Display', serif",
+                              fontSize: '26px',
+                              fontWeight: 700,
+                              color: '#7A0F1D',
+                              lineHeight: 1.2,
+                              display: 'block',
+                            }}
+                          >
+                            {timeText}
+                          </span>
+                          <h4
+                            style={{
+                              fontFamily: "'Montserrat', sans-serif",
+                              fontSize: '20px',
+                              fontWeight: 800,
+                              color: '#7A0F1D',
+                              margin: '6px 0 4px',
+                            }}
+                          >
+                            {titleText}
+                          </h4>
+                          <p
+                            style={{
+                              fontFamily: "'Cormorant Garamond', serif",
+                              fontSize: '18px',
+                              fontWeight: 500,
+                              color: '#7A0F1D',
+                              opacity: 0.85,
+                              margin: 0,
+                              lineHeight: 1.5,
+                            }}
+                          >
+                            {descText}
+                          </p>
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            width: '70px',
+                            height: '70px',
+                            borderRadius: '50%',
+                            backgroundColor: 'rgba(122, 15, 29, 0.08)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '12px',
+                          }}
+                        >
+                          <img
+                            src={data.icon}
+                            alt=""
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'contain',
+                              filter: 'invert(13%) sepia(85%) saturate(3821%) hue-rotate(340deg) brightness(88%) contrast(98%)',
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Central Circle Node */}
+                    <div
+                      style={{
+                        width: '16px',
+                        height: '16px',
+                        borderRadius: '50%',
+                        backgroundColor: '#7A0F1D',
+                        border: '3px solid #FAF7F2',
+                        boxShadow: '0 0 0 3px rgba(122, 15, 29, 0.25)',
+                        flexShrink: 0,
+                      }}
+                    />
+
+                    {/* Right Side */}
+                    <div
+                      style={{
+                        width: '42%',
+                        textAlign: !isEven ? 'left' : 'center',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: !isEven ? 'flex-start' : 'center',
+                      }}
+                    >
+                      {!isEven ? (
+                        <div>
+                          <span
+                            style={{
+                              fontFamily: "'Playfair Display', serif",
+                              fontSize: '24px',
+                              fontWeight: 700,
+                              color: '#7A0F1D',
+                              lineHeight: 1.2,
+                              display: 'block',
+                            }}
+                          >
+                            {timeText}
+                          </span>
+                          <h4
+                            style={{
+                              fontFamily: "'Montserrat', sans-serif",
+                              fontSize: '26px',
+                              fontWeight: 600,
+                              color: '#7A0F1D',
+                              margin: '6px 0 4px',
+                            }}
+                          >
+                            {titleText}
+                          </h4>
+                          <p
+                            style={{
+                              fontFamily: "'Cormorant Garamond', serif",
+                              fontSize: '20px',
+                              color: '#7A0F1D',
+                              opacity: 0.85,
+                              margin: 0,
+                              lineHeight: 1.5,
+                            }}
+                          >
+                            {descText}
+                          </p>
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            width: '70px',
+                            height: '70px',
+                            borderRadius: '50%',
+                            backgroundColor: 'rgba(122, 15, 29, 0.08)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '12px',
+                          }}
+                        >
+                          <img
+                            src={data.icon}
+                            alt=""
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'contain',
+                              filter: 'invert(13%) sepia(85%) saturate(3821%) hue-rotate(340deg) brightness(88%) contrast(98%)',
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </StationeryCard>
+        </section> 
+
+
+
+
+
+
+
+              {/* ── FINAL SECTION: Closing Note & RSVP ── */}
+<section
+  dir="ltr"
+  style={{
+    position: 'relative',
+    backgroundImage: `url(${finalBgImage})`, // استخدم صورة القلوب الفاتحة هنا
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    padding: '100px 1.5rem',
+    textAlign: 'center',
+    overflow: 'hidden',
+    minHeight: '650px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }}
+>
+  <Reveal>
+    <div
+      style={{
+        maxWidth: '520px',
+        margin: '0 auto',
+        padding: '50px 30px',
+        backgroundColor: 'rgba(255, 255, 255, 0.65)',
+        backdropFilter: 'blur(8px)',
+        borderRadius: '16px',
+        border: '1px solid rgba(122, 15, 29, 0.15)',
+        boxShadow: '0 20px 40px rgba(122, 15, 29, 0.08)',
+        position: 'relative',
+        zIndex: 2,
+      }}
+    >
+      {/* Decorative Icon Header */}
+      <div
+        style={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          backgroundColor: 'rgba(122, 15, 29, 0.08)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: '0 auto 24px',
+        }}
+      >
+        <Heart style={{ width: '24px', height: '24px', color: '#7A0F1D', fill: '#7A0F1D' }} />
+      </div>
+
+      {/* Main Closing Title */}
+      <h2
+        style={{
+          fontFamily: "'Great Vibes', cursive",
+          fontSize: 'clamp(42px, 6vw, 56px)',
+          fontWeight: 400,
+          color: '#7A0F1D',
+          margin: '0 0 16px',
+          lineHeight: 1.2,
+        }}
+      >
+        We Can't Wait!
+      </h2>
+
+      {/* Warm Heartfelt Message */}
+      <p
+        style={{
+          fontFamily: bodyFont || "'Cormorant Garamond', serif",
+          fontSize: '1.25rem',
+          lineHeight: 1.8,
+          color: '#5A121B',
+          margin: '0 0 32px',
+          fontWeight: 500,
+        }}
+      >
+        Your presence is the greatest gift of all as we begin this beautiful new chapter together.
+        Thank you for being a part of our story and making our special day truly unforgettable.
+      </p>
+
+      {/* Divider Accent */}
+      <div
+        style={{
+          width: '80px',
+          height: '1px',
+          background: 'linear-gradient(90deg, transparent, #7A0F1D, transparent)',
+          margin: '0 auto 32px',
+        }}
+      />
+
+      {/* Monogram / Signature */}
+      <p
+        style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: '1.4rem',
+          fontWeight: 600,
+          color: '#7A0F1D',
+          letterSpacing: '2px',
+          margin: 0,
+          textTransform: 'uppercase',
+        }}
+      >
+        See You Soon!
+      </p>
+    </div>
+  </Reveal>
+</section>
+
+
+
+
+
+
     </div>
   );
 };
 
 export default HomePage;
+
