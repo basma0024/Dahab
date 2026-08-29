@@ -1,1331 +1,583 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Heart, Calendar, MapPin, Clock } from 'lucide-react';
-import { gsap } from 'gsap';
-import CountdownTimer from '../components/CountdownTimer';
-import { motion } from 'framer-motion';
-import weddingKidsImg from '../../public/imgs/children-removebg-preview.png';
-import bgImage from '../../public/imgs/countdown.png';
-import ringsIconImg from '../../public/imgs/rings-icon.png';
-import glassIconImg from '../../public/imgs/glass-icon.png';
-import bucketIconImg from '../../public/imgs/bucket-icon.png';
-import handsHenna from '../../public/imgs/Nikah.jpg';
-import ringHand from '../../public/imgs/download (1).jpg';
-import heartsDecor from '../../public/imgs/back.png';
-import locationImg from '../../public/imgs/WhatsApp Image 2026-08-21 at 1.11.50 AM.jpeg';
-import logoImg from '../../public/imgs/aa.png'; 
-import finalBgImage from '../../public/imgs/final.png'; 
+// src/pages/HomePage.tsx (أو حسب مسار الملف لديك)
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Sparkles, 
+  Heart, 
+  Star, 
+  Calendar, 
+  Clock, 
+  Scale, 
+  Ruler, 
+  Send, 
+  Maximize2, 
+  X,
+  ChevronDown
+} from 'lucide-react';
+import heroImg from '../../public/imgs/bgg.jpeg';
+import bg from '../../public/imgs/PM.jpeg';
+import dahabImg from '../../public/imgs/finalbaby.jpg';
+import babyToy from '../../public/imgs/babyToy.jpg';
+import dahab1 from '../../public/imgs/dahab1.jpg';
+import dahab2 from '../../public/imgs/dahab2.jpg';
+import dahab3 from '../../public/imgs/dahab3.jpg';
+import pinkBgImg from '../../public/imgs/dahab-pink-bg.png';
+
+import bottleImg from '../../public/imgs/babiiii.png';
+import { addWish } from "../lib/wishesStore";
+import footerBg from "../../public/imgs/footerbg.jpg";
+import phoneImg from "../../public/imgs/phoneee.png";
 
 
-interface ProgramItem {
-  time: string;
-  title: string;
-  desc: string;
+interface Props {
+  onAnswer: () => void;
 }
 
-interface Colors {
-  bgLight: string;
-  primary: string;
-  primaryDark: string;
-  accent: string;
-  textMuted: string;
-  borderSoft: string;
-}
-const eyebrowFont = "'Jost', sans-serif";
-
-const bodyFont = "'Cormorant Garamond', serif";
-
-const programItems: ProgramItem[] = [
-  { 
-    time: '8:30 PM', 
-    title: 'Guest Reception', 
-    desc: 'We warmly welcome you to the beginning of a blessed evening as we celebrate this sacred union.' 
-  },
-  { 
-    time: '9:30 PM', 
-    title: 'Celebration & Hospitality', 
-    desc: 'Join us in celebrating our joy with sweets, warm wishes, and heartfelt prayers.' 
-  },
-  { 
-    time: '10:00 PM', 
-    title: 'Memorable Photos', 
-    desc: 'Capturing beautiful moments together to cherish as lasting memories with you.' 
-  },
+const stats = [
+  { label: "الميلاد", value: "١٨ يوليو ٢٠٢٦" },
+  { label: "الوقت", value: "١٠:٤٢ صباحاً" },
+  
+  { label: "العيون", value: "بني" },
+  { label: "الشعر", value: "بني" },
 ];
 
+const polaroids = [
+  { src: dahab1, rotate: -8, x: 0 },
+  { src: dahab2, rotate: 3, x: 0 },
+  { src: dahab3, rotate: 9, x: 0 },
+];
 
-const Reveal: React.FC<{ children: React.ReactNode; delay?: number; style?: React.CSSProperties }> = ({
-  children,
-  delay = 0,
-  style = {},
-}) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+// الأنواع الخاص بالمكون
+interface Wish {
+  id: number;
+  name: string;
+  text: string;
+  date: string;
+}
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) { setVisible(true); obs.unobserve(el); } }),
-      { threshold: 0.15 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
+interface SelectedImage {
+  url: string;
+  caption?: string;
+}
 
-  return (
-    <div
-      ref={ref}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(26px)',
-        transition: `opacity 1s ease ${delay}s, transform 1s ease ${delay}s`,
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
+
+
+export default function HomePage() {
+
+
+
+
+  
+  // const [wishes, setWishes] = useState<Wish[]>(() => {
+  //   const saved = localStorage.getItem('baby_wishes');
+  //   return saved ? JSON.parse(saved) : [
+  //     { id: 1, name: "خالة سارة", text: "يا روح قلب خالتك، نورتِ الدنيا! الله يحفظك ويجعل أيامك كلها سعادة وفرح.", date: "منذ ساعة" },
+  //     { id: 2, name: "عمو أحمد", text: "ألف مبروك ماما وبابا، تتربى بعزكم ودلالكم يارب.", date: "منذ ساعتين" }
+  //   ];
+  // });
+
+const [formName, setFormName] = useState<string>('');
+const [formText, setFormText] = useState<string>('');
+const [sent, setSent] = useState(false);
+
+const handleAddWish = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  if (!formName.trim() || !formText.trim()) return;
+
+  addWish(formName.trim(), formText.trim());
+
+  setFormName('');
+  setFormText('');
+  setSent(true);
+  setTimeout(() => setSent(false), 3000);
 };
 
-const StationeryCard: React.FC<{
-  bg?: string;
-  maxWidth?: number;
-  children?: React.ReactNode;
-  style?: React.CSSProperties;
-}> = ({ bg, maxWidth = 420, children, style }) => (
-  <div
-    style={{
-      position: 'relative',
-      width: '100%',
-      maxWidth: `${maxWidth}px`,
-      margin: '0 auto',
-      aspectRatio: '675 / 1350',
-      // borderRadius: '18px',
-      overflow: 'hidden',
-      boxShadow: '0 18px 45px rgba(44,33,26,0.16)',
-      ...(bg && {
-        backgroundImage: `url(${bg})`,
-        backgroundSize: '100% 100%',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }),
-      ...style,
-    }}
-  >
-    {children}
-  </div>
-);
-
-const HomePage: React.FC = () => {
-  const [isOpened, setIsOpened] = useState<boolean>(false);
-
-  // References لـ GSAP Animations
-  const heroCardRef = useRef<HTMLDivElement>(null);
-  const goldFrameRef = useRef<HTMLImageElement>(null);
-  const flowerRef = useRef<HTMLImageElement>(null);
-  const glitterDustRef = useRef<HTMLImageElement>(null);
-  const glitterClusterRef = useRef<HTMLImageElement>(null);
-  const textRevealRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  const addToTextRefs = (el: HTMLDivElement | null) => {
-    if (el && !textRevealRefs.current.includes(el)) {
-      textRevealRefs.current.push(el);
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  useEffect(() => {
-    if (!isOpened) return;
 
-    // تنظيف المراجع وتجهيز للعناصر
-    const validTextRefs = textRevealRefs.current.filter((item) => item !== null);
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
-      tl.fromTo(
-        goldFrameRef.current,
-        { opacity: 0, scale: 0.85 },
-        { opacity: 1, scale: 1, duration: 1.2, delay: 0.5 }
-      )
-        .fromTo(
-          glitterDustRef.current,
-          { opacity: 0 },
-          { opacity: 0.6, duration: 1 },
-          '-=0.8'
-        )
-        .fromTo(
-          glitterClusterRef.current,
-          { opacity: 0, scale: 0.5 },
-          { opacity: 0.85, scale: 1, duration: 1 },
-          '-=0.8'
-        )
-        .fromTo(
-          flowerRef.current,
-          { opacity: 0, scale: 0.6, rotation: 12 },
-          { opacity: 1, scale: 1, rotation: 0, duration: 1.2, ease: 'back.out(1.2)' },
-          '-=0.8'
-        )
-        .fromTo(
-          validTextRefs,
-          { opacity: 0, y: 25, filter: 'blur(6px)' },
-          {
-            opacity: 1,
-            y: 0,
-            filter: 'blur(0px)',
-            duration: 0.9,
-            stagger: 0.25,
-          },
-          '-=0.6'
-        );
-    }, heroCardRef);
 
-    return () => ctx.revert();
-  }, [isOpened]);
 
-  const weddingDate: string = '2026-09-01T18:00:00';
 
-  const colors: Colors = {
-    bgLight: '#FAF6EF',
-    primary: '#3B2F26',
-    primaryDark: '#1E1612',
-    accent: '#B8945F',
-    textMuted: '#8C7A66',
-    borderSoft: 'rgba(59, 47, 38, 0.12)',
   
+  return (
+    <div dir="rtl" className="min-h-screen bg-[#FAF7F2] text-[#4A3E3D] font-sans antialiased selection:bg-[#E2C2C6]/30 overflow-x-hidden">
+      
+      {/* Background Floating Decorative Elements */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-40">
+        <div className="absolute top-[10%] right-[5%] text-[#E2C2C6] animate-pulse"><Sparkles size={20} /></div>
+        <div className="absolute top-[35%] left-[8%] text-[#D8A7B1] opacity-60"><Star size={14} /></div>
+        <div className="absolute top-[60%] right-[12%] text-[#E2C2C6]"><Heart size={16} /></div>
+        <div className="absolute top-[80%] left-[15%] text-[#D8A7B1] opacity-50"><Sparkles size={18} /></div>
+      </div>
+
     
 
-  };
-
-  return (
-    <div
-      className="relative"
-      style={{
-        fontFamily: "'Caveat', cursive",
-        background: colors.bgLight,
-        color: colors.primary,
-        direction: 'rtl',
-        overflowX: 'hidden',
-      }}
-    >
-      {/* ── Google Font Caveat Import ── */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
-        
-        * {
-          font-family: 'Caveat', cursive !important;
-        }
-      `}</style>
-
-      {/* ── Curtain Overlay ── */}
-     <motion.div
-  initial={{ opacity: 1 }}
-  animate={{ opacity: isOpened ? 0 : 1, pointerEvents: isOpened ? 'none' : 'auto' }}
-  transition={{ duration: 0.8, delay: 0.8 }}
-  style={{
-    position: 'fixed',
-    inset: 0,
-    zIndex: 9999,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Overlay خلفية شفافة ناعمة
-  }}
+<section
+  dir="rtl"
+  className="relative min-h-screen flex flex-col items-center justify-center text-center  bg-white"
 >
-  {/* Left Door */}
   <motion.div
-    animate={{ x: isOpened ? '-100%' : '0%' }}
-    transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1] }}
-    style={{
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '50%',
-      height: '100%',
-      backgroundColor: '#FAF7F2',
-      borderRight: '1px solid rgba(122, 15, 29, 0.2)',
-      boxShadow: '10px 0 30px rgba(122, 15, 29, 0.15)',
-      zIndex: 1,
-      opacity: 0.96, // شفافة قليلاً لمظهر أرقّ
-    }}
-  />
-
-  {/* Right Door */}
-  <motion.div
-    animate={{ x: isOpened ? '100%' : '0%' }}
-    transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1] }}
-    style={{
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      width: '50%',
-      height: '100%',
-      backgroundColor: '#FAF7F2',
-      borderLeft: '1px solid rgba(122, 15, 29, 0.2)',
-      boxShadow: '-10px 0 30px rgba(122, 15, 29, 0.15)',
-      zIndex: 1,
-      opacity: 0.96, // شفافة قليلاً لمظهر أرقّ
-    }}
-  />
-
-  {/* Center Button / Logo */}
-  <motion.div
-    animate={{ scale: isOpened ? 0 : 1, opacity: isOpened ? 0 : 1 }}
-    transition={{ duration: 0.4 }}
-    onClick={() => setIsOpened(true)}
-    style={{
-      position: 'relative',
-      zIndex: 2,
-      cursor: 'pointer',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '14px',
-    }}
+    initial={{ opacity: 0, y: 30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1, ease: "easeOut" }}
+    className="relative z-10 w-full max-w-sm mx-auto flex flex-col items-center justify-center bg-white  px-6 py-10"
   >
-    <div
-      style={{
-        width: '130px',
-        height: '130px',
-        borderRadius: '50%', // Rounded corners للوجو
-        backgroundColor: '#FFFFFF',
-        boxShadow: '0 12px 35px rgba(122, 15, 29, 0.25)',
-        padding: '10px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        transition: 'transform 0.3s ease',
-        border: '1px solid rgba(122, 15, 29, 0.15)',
-      }}
-      onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-      onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+    {/* العنوان الرئيسي */}
+    <motion.h1
+      initial={{ opacity: 0, y: -15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
+      className="
+        text-4xl md:text-5xl
+        text-[#BE5E68]
+        font-['Aref_Ruqaa']
+        leading-relaxed
+        mb-3
+      "
+    >
+      أهلاً بكِ يا دهب
+    </motion.h1>
+
+    {/* الجملة الفرعية */}
+    <motion.p
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.9, delay: 0.5 }}
+      className="
+        text-base md:text-lg
+        text-[#8C8378]
+        font-medium
+        tracking-wide
+        mb-8
+        font-['Tajawal']
+      "
+    >
+      بداية حياة جديدة مليئة بالحب
+    </motion.p>
+
+    {/* الصورة */}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.92 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1, delay: 0.7, ease: "easeOut" }}
+      whileHover={{ scale: 1.02 }}
+      className="
+        relative w-full 
+         mb-8
+      "
     >
       <img
-        src={logoImg}
-        alt="M & A Logo"
-        style={{
-          width: '100%',
-          height: '100%',
-          borderRadius: '50%', // Continuous curve داخلية
-          objectFit: 'cover',
-        }}
+        src={dahabImg}
+        alt="دهب"
+        className="w-full h-full object-cover"
       />
-    </div>
+    </motion.div>
 
-    <span
-      style={{
-        fontFamily: "'Playfair Display', serif",
-        fontSize: '20px',
-        letterSpacing: '2px',
-        color: '#7A0F1D', // اللون البرجاندي
-        fontWeight: 700,
-        textTransform: 'uppercase',
-      }}
+    {/* الكابشن */}
+    <motion.p
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, delay: 1 }}
+      className="
+        text-xl md:text-xl
+        text-[#BE5E68]
+        font-medium
+        tracking-wide
+        font-['Tajawal']
+      "
     >
-      Tap to Open
-    </span>
+      كنزنا الصغير
+    </motion.p>
   </motion.div>
-</motion.div>
+</section>
 
-      {/* ── Hero Section ── */}
-    <section
-  style={{
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    background: colors.bgLight,
-    position: 'relative',
-    // padding: '40px 0',
+
+
+
+
+
+
+
+<section
+  dir="rtl"
+  className="relative min-h-screen flex flex-col items-center justify-center px-6 py-16 bg-[#FDFBF8]"
+     style={{
+    backgroundImage: `url(${heroImg})`,
   }}
 >
-  <StationeryCard
-    style={{
-      backgroundColor: colors.bgLight,
-      aspectRatio: 'auto',
-      minHeight: '620px',
-      paddingBottom: '50px',
-    }}
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1, ease: "easeOut" }}
+    className="relative z-10 w-full max-w-sm mx-auto flex flex-col items-center bg-white rounded-[2rem] shadow-[0_8px_40px_rgba(0,0,0,0.06)] px-7 py-10"
   >
-    {/* Childhood sweethearts text */}
+    {/* العنوان */}
+    <motion.h1
+      initial={{ opacity: 0, y: -15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, delay: 0.15, ease: "easeOut" }}
+      className="
+        text-3xl md:text-xl
+        text-[#be5e68]
+        font-medium
+        tracking-wide
+        mb-9
+        flex items-center gap-2
+        font-['Aref_Ruqaa']
+      "
+    >
+      تعرفوا على دهب
+      <span className="text-2xl">♡</span>
+    </motion.h1>
+
+    {/* الصفوف */}
+    <div className="w-full flex flex-col">
+      {stats.map((item, i) => (
+        <motion.div
+          key={item.label}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 + i * 0.15, ease: "easeOut" }}
+          className="flex items-baseline justify-between border-b border-[#EDE7E0] py-3"
+        >
+          <span
+            className="
+              text-lg md:text-xl
+              text-[#be5e68]
+              font-['Aref_Ruqaa']
+            "
+          >
+            {item.label}
+          </span>
+          <span
+            className="
+              text-base md:text-lg
+              text-[#be5e68]
+              font-light
+              tracking-wide
+              font-['Tajawal']
+            "
+          >
+            {item.value}
+          </span>
+        </motion.div>
+      ))}
+    </div>
+
+    {/* الصورة */}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.85, y: 15 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.9, delay: 1.5, ease: "easeOut" }}
+      whileHover={{ scale: 1.05, rotate: -2 }}
+      className="w-32 md:w-40 mt-8"
+    >
+      <img
+        src={babyToy}
+        alt="دهب"
+        className="w-full h-full object-contain "
+      />
+    </motion.div>
+
+   
+  </motion.div>
+</section>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+     
+
+
+
+
+
+
+<section
+  dir="rtl"
+  className="relative min-h-screen flex flex-col items-center justify-center  bg-[#FDFBF8] "
+     style={{
+    backgroundImage: `url(${bg})`,
+  }}
+>
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1, ease: "easeOut" }}
+    className="relative z-10 w-full max-w-sm mx-auto flex flex-col items-center   px-6 pt-10 pb-8"
+  >
+    {/* العنوان */}
+    <motion.h1
+      initial={{ opacity: 0, y: -15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
+      className="
+        text-3xl md:text-4xl
+        text-[#be5e68]
+        font-['Aref_Ruqaa']
+        mb-6
+      "
+    >
+صغيرتنا الحبيبة    </motion.h1>
+
+    {/* نص الرسالة */}
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, delay: 0.45, ease: "easeOut" }}
+      className="
+        text-base md:text-lg
+        text-[#be5e68df]
+        font-medium
+        leading-loose
+        text-center
+        mb-10
+        font-['Tajawal']
+      "
+    >
+      {/* <p className="mb-2">حبيبتنا دهب،</p> */}
+      <p>
+لم نكن نعرف أن القلب يمكن أن يتسع لهذا القدر من الحب حتى جئتِ أنتِ...
+نسأل الله أن يحفظكِ لنا، وأن يجعل أيامكِ القادمة أجمل مما نتمنى، وأن نراكِ تكبرين أمام أعيننا عامًا بعد عام.
+      </p>
+    </motion.div>
+
+    {/* الصور بولارويد */}
+<div className="relative w-full h-80 md:h-96 flex items-center justify-center mb-6">
+  {polaroids.map((p, i) => (
+    <div
+      key={i}
+      style={{
+        position: "absolute",
+        left: `${50 + (i - 1) * 34}%`,
+        transform: "translateX(-50%)",
+      }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 40, rotate: 0, scale: 0.85 }}
+        animate={{ opacity: 1, y: 0, rotate: p.rotate, scale: 1 }}
+        transition={{
+          duration: 0.8,
+          delay: 0.9 + i * 0.25,
+          ease: "easeOut",
+        }}
+        whileHover={{ scale: 1.06, rotate: 0, zIndex: 10 }}
+        className="
+          bg-white
+          p-2.5 pb-6
+          rounded-[4px]
+          shadow-[0_6px_20px_rgba(0,0,0,0.15)]
+          w-44 md:w-52
+        "
+      >
+        <div className="w-full aspect-[3/4] overflow-hidden rounded-[2px]">
+          <img
+            src={p.src}
+            alt="دهب"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </motion.div>
+    </div>
+  ))}
+</div>
+   
+  </motion.div>
+</section>
+
+
+
+
+<section
+  dir="rtl"
+  className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-16 overflow-hidden bg-cover bg-center bg-no-repeat"
+  style={{
+    backgroundImage: `url(${pinkBgImg})`,
+  }}
+>
+  {/* تظليل خفيف عشان النص يبان أوضح */}
+  <div className="absolute inset-0 bg-white/20 pointer-events-none" />
+
+  <motion.div
+    initial={{ opacity: 0, y: 25 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1.3, ease: "easeOut" }}
+    className="relative z-10 w-full max-w-md mx-auto flex flex-col items-center justify-center"
+  >
+    {/* دعاء */}
     <motion.p
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1, delay: 0.4, ease: 'easeOut' }}
-      style={{
-        textAlign: 'center',
-        fontSize: '2.9rem',
-        fontWeight: 600,
-        color: '#4a4a4a',
-        marginBottom: '20px',
-        zIndex: 2,
-        position: 'relative',
-        paddingTop: '80px',
-        lineHeight: 1.2,
-      }}
+      transition={{ duration: 1.1, delay: 0.3, ease: "easeOut" }}
+      className="
+        text-2xl md:text-2xl
+        text-[#9B5B6B]
+        font-['Aref_Ruqaa']
+        leading-loose
+        tracking-wide
+        drop-shadow-[0_2px_6px_rgba(255,255,255,0.6)]
+      "
     >
-      From childhood sweethearts <br /> to forever
+      اللهم أنبتها نباتًا حسنًا،
+      <br />
+      واحفظها بعينك التي لا تنام،
+      <br />
+      واجعلها قرة عينٍ لنا،
+      <br />
+      وارزقها عمرًا جميلًا وقلبًا مطمئنًا
+      <br />
+      وحياةً مليئة بالخير
     </motion.p>
 
-    {/* Kids photo */}
-    <motion.img
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1, delay: 0.6, ease: 'easeOut' }}
-      src={weddingKidsImg}
-      alt="We're Getting Married"
-      style={{
-        display: 'block',
-        width: '85%',
-        maxWidth: '360px',
-        margin: '0 auto',
-        zIndex: 2,
-        position: 'relative',
-      }}
-    />
-
-    {/* Speech bubbles */}
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '14px',
-        marginTop: '30px',
-        padding: '0 8%',
-        position: 'relative',
-        zIndex: 2,
-      }}
-    >
-      <motion.div
-        initial={{ opacity: 0, y: 15, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.9, ease: 'easeOut' }}
-        style={{
-          // background: '#F3EEE6',
-          // borderRadius: '24px',
-          padding: '12px 28px',
-          // boxShadow: '0 4px 14px rgba(59,47,38,0.08)',
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-            fontSize: '28px',
-            fontWeight: 700,
-            color: colors.primary,
-          }}
-        >
-         ? Did you find out 
-        </span>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 15, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8, delay: 1.2, ease: 'easeOut' }}
-        style={{
-          // background: '#F3EEE6',
-          // borderRadius: '24px',
-          padding: '16px 26px',
-          // boxShadow: '0 4px 14px rgba(59,47,38,0.08)',
-          textAlign: 'center',
-        }}
-      >
-        <p
-          style={{
-            fontFamily: "'Montserrat', sans-serif",
-            fontSize: '25px',
-            fontWeight: 500,
-            color: colors.textMuted,
-            margin: 0,
-            lineHeight: 1.8,
-          }}
-        >
-          yes, it's us <br />
-         Time flew by and these two sweet kids are getting married soon
-        </p>
-      </motion.div>
-    </div>
-  </StationeryCard>
+    {/* توقيع صغير تحت */}
+   
+  </motion.div>
 </section>
 
 
-      {/* ── SECOND SECTION ── */}
-<section style={{ background: colors.bgLight, position: 'relative' }}>
-  <StationeryCard
-    style={{
-      backgroundColor: '#7A0F1D',
-      position: 'relative',
-      overflow: 'hidden',
-      padding: 0,
-    }}
-  >
-    {/* Decorative hearts scattered overlay */}
-    <img
-      src={heartsDecor}
-      alt=""
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-        opacity: 0.9,
-        zIndex: 1,
-        pointerEvents: 'none',
-      }}
-    />
-
-    {/* Top polaroid photo, tilted right, aligned right side */}
+<section className="py-24 px-6 bg-[#FDF6F7] z-10 relative">
+  <div className="max-w-3xl mx-auto space-y-8">
     <motion.div
-      initial={{ opacity: 0, rotate: 2, y: -20 }}
-      whileInView={{ opacity: 1, rotate: -6, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.9, ease: 'easeOut' }}
-      style={{
-        position: 'absolute',
-        top: '6%',
-        left: '8%',
-        width: '68%',
-        background: '#F5F0E6',
-        padding: '10px 10px 22px',
-        // boxShadow: '0 14px 28px rgba(0,0,0,0.35)',
-        zIndex: 2,
-      }}
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, ease: "easeOut" }}
+      className="text-center space-y-3 mb-14 "
     >
-      <img
-        src={handsHenna}
-        alt="Ahmed & Malak"
-        style={{
-          width: '100%',
-          height: '210px',
-          objectFit: 'cover',
-          display: 'block',
-        }}
-      />
-    </motion.div>
-
-    {/* Center text "Ahmed + Malak =" with heart */}
-    <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8, delay: 0.4 }}
-      style={{
-        position: 'absolute',
-        top: '46%',
-        left: 0,
-        right: 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '10px',
-        zIndex: 3,
-      }}
-    >
-      <Heart style={{ width: '26px', height: '26px', color: '#F5EFE4' }} />
-      <span
-        style={{
-          fontFamily: "'Great Vibes', cursive",
-          fontSize: '32px',
-          color: '#F5EFE4',
-        }}
-      >
-         =Amr + Aya 
-      </span>
-    </motion.div>
-
-    {/* Bottom polaroid photo, tilted left, aligned left side */}
-    <motion.div
-      initial={{ opacity: 0, rotate: -2, y: 20 }}
-      whileInView={{ opacity: 1, rotate: 5, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
-      style={{
-        position: 'absolute',
-        bottom: '6%',
-        left: '24%',
-        width: '68%',
-        background: '#F5F0E6',
-        padding: '10px 10px 22px',
-        boxShadow: '0 14px 28px rgba(0,0,0,0.35)',
-        zIndex: 2,
-      }}
-    >
-      <img
-        src={ringHand}
-        alt="Ahmed & Malak"
-        style={{
-          width: '100%',
-          height: '210px',
-          objectFit: 'cover',
-          display: 'block',
-        }}
-      />
-    </motion.div>
-  </StationeryCard>
-</section>
-
-
-
-
-
-      {/* ── THIRD SECTION: Save The Date & Countdown ── */}
-
-
-
-            <section style={{ padding: '110px 1.5rem', textAlign: 'center', background: '#FAF7F2' }}>
-  <Reveal>
-    <p style={{ fontFamily: bodyFont, fontSize: '1.8rem', lineHeight: 1.9, color: '#7A0F1D', maxWidth: '560px', margin: '0 auto 50px' }}>
-      So we invite you to share with us this joyful day when we become a family
-    </p>
-
-    <div style={{
-      maxWidth: '350px',
-      margin: '0 auto',
-      backgroundColor: '#7A0F1D',
-      padding: '28px 20px 40px',
-      borderRadius: '4px',
-      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
-      transform: 'rotate(-2deg)',
-      position: 'relative',
-      clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 12px), 96.4% 100%, 92.8% calc(100% - 12px), 89.2% 100%, 85.6% calc(100% - 12px), 82% 100%, 78.4% calc(100% - 12px), 74.8% 100%, 71.2% calc(100% - 12px), 67.6% 100%, 64% calc(100% - 12px), 60.4% 100%, 56.8% calc(100% - 12px), 53.2% 100%, 49.6% calc(100% - 12px), 46% 100%, 42.4% calc(100% - 12px), 38.8% 100%, 35.2% calc(100% - 12px), 31.6% 100%, 28% calc(100% - 12px), 24.4% 100%, 20.8% calc(100% - 12px), 17.2% 100%, 13.6% calc(100% - 12px), 10% 100%, 6.4% calc(100% - 12px), 2.8% 100%, 0 calc(100% - 12px))'
-    }}>
-
-      <p style={{
-        fontFamily: "'Playfair Display', serif",
-        fontSize: '1.8rem',
-        color: '#FAF7F2',
-        marginBottom: '24px',
-        letterSpacing: '0.03em',
-        direction: 'ltr'
-      }}>
-        September 2026
-      </p>
-
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(7, 1fr)',
-        gap: '5px',
-        marginBottom: '14px',
-        direction: 'ltr'
-      }}>
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} style={{
-            fontFamily: eyebrowFont || 'sans-serif',
-            fontSize: '1.2rem',
-            color: '#FAF7F2',
-            fontWeight: '600',
-            opacity: 0.85
-          }}>
-            {day}
-          </div>
-        ))}
-      </div>
-
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(7, 1fr)',
-        gap: '8px',
-        direction: 'ltr'
-      }}>
-        {/* September 1, 2026 falls on a Tuesday → 2 empty cells (Sun, Mon) */}
-        {[...Array(2)].map((_, i) => <div key={'empty-' + i} />)}
-
-        {/* September has 30 days */}
-        {[...Array(30)].map((_, i) => {
-          const dayNumber = i + 1;
-          const isTargetDay = dayNumber === 1;
-
-          return (
-            <div key={dayNumber} style={{
-              position: 'relative',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '36px'
-            }}>
-              {isTargetDay && (
-                <Heart
-                  style={{
-                    position: 'absolute',
-                    width: '32px',
-                    height: '32px',
-                    color: '#FAF7F2',
-                    fill: '#FAF7F2',
-                    zIndex: 0,
-                  }}
-                />
-              )}
-
-              <div style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: '0.9rem',
-                color: isTargetDay ? '#7A0F1D' : '#FAF7F2',
-                zIndex: 1,
-                fontWeight: isTargetDay ? '700' : '400',
-                opacity: isTargetDay ? 1 : 0.75,
-                marginTop: isTargetDay ? '-3px' : 0,
-              }}>
-                {dayNumber}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  </Reveal>
-</section>
-
-{/* Fourth Section Count Down */}
-     {/* ── SAVE THE DATE & COUNTDOWN SECTION ── */}
-<section
-  dir="ltr"
-  style={{
-    position: 'relative',
-    backgroundImage: `url(${bgImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    padding: '90px 1.5rem',
-    textAlign: 'center',
-    overflow: 'hidden',
-    minHeight: '550px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }}
->
-  {/* Dark Overlay for contrast */}
-  <div
-    style={{
-      position: 'absolute',
-      inset: 0,
-      backgroundColor: 'rgba(50, 8, 15, 0.45)',
-      zIndex: 1,
-    }}
-  />
-
-  <div style={{ position: 'relative', zIndex: 2, maxWidth: '600px', width: '100%' }}>
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '16px',
-        marginBottom: '35px',
-      }}
-    >
-      {/* Title */}
-      <h2
-        style={{
-          fontFamily: "'Playfair Display', serif",
-          fontSize: 'clamp(34px, 5vw, 48px)',
-          fontWeight: 600,
-          color: '#FAF7F2',
-          margin: 0,
-          letterSpacing: '2px',
-          textTransform: 'uppercase',
-          textShadow: '0 2px 10px rgba(0,0,0,0.3)',
-        }}
-      >
-        Save The Date
+      <h2 className="text-3xl md:text-4xl font-['Aref_Ruqaa'] text-[#B0677A]">
+        شاركونا حبكم
       </h2>
+      <p className="text-sm text-[#9B7C82] font-['Tajawal']">
+        اتركوا لصغيرتنا أمنية تحملها معها في بداية حياتها
+      </p>
+    </motion.div>
 
-      {/* Date & Time Row */}
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: '24px',
-          color: '#FAF7F2',
-          fontSize: '18px',
-          fontFamily: "'Montserrat', sans-serif",
-          fontWeight: 500,
-          letterSpacing: '1px',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Calendar style={{ width: '20px', height: '20px', color: '#FAF7F2' }} />
-          <span>SEP 01 . 2026</span>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Clock style={{ width: '20px', height: '20px', color: '#FAF7F2' }} />
-          <span>09:00 PM</span>
-        </div>
-      </div>
-
-      {/* Location */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          color: '#FAF7F2',
-          fontSize: '19px',
-          fontFamily: "'Cormorant Garamond', serif",
-          fontStyle: 'italic',
-          fontWeight: 600,
-        }}
-      >
-        <MapPin style={{ width: '20px', height: '20px', color: '#FAF7F2' }} />
-        <span>Sandy Hall</span>
-      </div>
-    </div>
-
-    {/* Countdown Timer Component */}
-    <div style={{ marginTop: '15px' }}>
-      <CountdownTimer targetDate={weddingDate} />
-    </div>
-  </div>
-</section>
-
-
- {/* ── FIFTH SECTION: Location Details ── */}
-    <section
-  style={{
-    background: colors.bgLight,
-    display: 'flex',
-    justifyContent: 'center',
-  }}
->
-  <StationeryCard
-    style={{
-      backgroundColor: '#7A0F1D',
-      padding: '60px 24px 30px 24px',
-      position: 'relative',
-      overflow: 'hidden',
-    }}
-  >
-    {/* Decorative scattered hearts */}
-    {[10, 30, 55, 75, 90].map((left, i) => (
-      <Heart
-        key={i}
-        style={{
-          position: 'absolute',
-          left: `${left}%`,
-          top: `${8 + (i % 3) * 6}%`,
-          width: i % 2 === 0 ? '16px' : '12px',
-          height: i % 2 === 0 ? '16px' : '12px',
-          color: '#FAF7F2',
-          opacity: 0.25,
-          zIndex: 0,
-        }}
-      />
-    ))}
-
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        // justifyContent: 'space-between',
-        height: '100%',
-        textAlign: 'center',
-        position: 'relative',
-        zIndex: 1,
-      }}
+    <motion.form
+      onSubmit={handleAddWish}
+      initial={{ opacity: 0, y: 25, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
+      className="relative bg-[#F3D9DE] p-6 md:p-8 rounded-[1.75rem] shadow-[0_8px_30px_rgba(176,103,122,0.15)] space-y-5"
     >
+      <motion.img
+        src={bottleImg}
+        alt="بيبرونة"
+        initial={{ opacity: 0, rotate: -20, scale: 0.7 }}
+        animate={{ opacity: 1, rotate: -10, scale: 1 }}
+        transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+        className="absolute -top-9 left-6 w-20 md:w-14 drop-shadow-md"
+      />
+
+      <h3 className="text-xl md:text-2xl font-['Aref_Ruqaa'] text-[#8C4A5C] mb-2">
+        اتركوا أمنية صغيرة
+      </h3>
+
       <div>
-        <h2
-          style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: '34px',
-            fontWeight: 700,
-            color: '#FAF7F2',
-            letterSpacing: '2px',
-            marginBottom: '30px',
-          }}
-        >
-          Location & Venue
-        </h2>
-
-        <div
-          style={{
-            width: '60px',
-            height: '1px',
-            background: 'rgba(250,247,242,0.5)',
-            margin: '30px auto',
-          }}
-        />
-
-        <p
-          style={{
-            fontFamily: "'Montserrat', sans-serif",
-            fontSize: '22px',
-            fontWeight: 600,
-            letterSpacing: '1px',
-            textTransform: 'uppercase',
-            color: '#FAF7F2',
-            margin: '0 0 4px',
-          }}
-        >
-          Sandy Hall
-        </p>
-        <p
-          style={{
-            fontSize: '18px',
-            fontWeight: 600,
-            color: 'rgba(250,247,242,0.8)',
-            margin: '10px 0 14px',
-            lineHeight: 1.5,
-          }}
-        >
-          We can't wait to celebrate our special day with you at Sandy Hall.
-        </p>
-      </div>
-
-      <div
-        style={{
-          width: '80%',
-          border: '6px solid #FAF7F2',
-          overflow: 'hidden',
-          boxShadow: '0 14px 30px rgba(0,0,0,0.3)',
-          transform: 'rotate(-3deg)',
-          margin: '15px 0',
-        }}
-      >
-        <img
-          src={locationImg}
-          alt="Venue Location"
-          style={{
-            width: '100%',
-            height: '200px',
-            objectFit: 'cover',
-            filter: 'grayscale(15%)',
-            display: 'block',
-          }}
+        <label className="block text-xs font-medium text-[#8C4A5C] mb-1.5 font-['Tajawal']">
+          الاسم
+        </label>
+        <input
+          type="text"
+          value={formName}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormName(e.target.value)}
+          placeholder="اكتب اسمك هنا..."
+          className="w-full px-4 py-2.5 rounded-xl border border-[#E3B8C1] focus:outline-none focus:border-[#C98A9A] text-sm bg-white/70"
+          required
         />
       </div>
 
-      <a
-        href="https://maps.google.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px',
-          backgroundColor: 'transparent',
-          color: '#FAF7F2',
-          padding: '10px 36px',
-          border: '1px solid #FAF7F2',
-          borderRadius: '30px',
-          textDecoration: 'none',
-          fontSize: '13px',
-          fontWeight: 700,
-          letterSpacing: '2px',
-          textTransform: 'uppercase',
-          marginTop: '30px',
-        }}
+      <div>
+        <label className="block text-xs font-medium text-[#8C4A5C] mb-1.5 font-['Tajawal']">
+          أمنيتك لها
+        </label>
+        <textarea
+          rows={3}
+          value={formText}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormText(e.target.value)}
+          placeholder={`اكتب أمنيتك الصادقة لـ دهب...`}
+          className="w-full px-4 py-2.5 rounded-xl border border-[#E3B8C1] focus:outline-none focus:border-[#C98A9A] text-sm bg-white/70 resize-none"
+          required
+        />
+      </div>
+
+      <motion.button
+        type="submit"
+        whileTap={{ scale: 0.96 }}
+        whileHover={{ scale: 1.02 }}
+        className="w-full py-3 bg-[#8C4A5C] hover:bg-[#7A3F4F] text-white rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm font-['Tajawal']"
       >
-        <MapPin style={{ width: '16px', height: '16px' }} />
-        View Map
-      </a>
-    </div>
-  </StationeryCard>
+        <span>{sent ? "تم الإرسال بحب 🤍" : "أرسلوها بحب"}</span>
+        {!sent && <Send size={14} />}
+      </motion.button>
+    </motion.form>
+  </div>
 </section>
   
 
 
+     
 
-
-
-
-      {/* ── sixth SECTION: Event Program ── */}
-        <section 
-          dir="ltr"
-          style={{
-            background: colors.bgLight,
-            display: 'flex',
-            justifyContent: 'center',
-            // padding: '40px 0',
-          }}
-        >
-          <StationeryCard
-            style={{
-              backgroundColor: '#FAF7F2',
-              padding: '70px 30px 60px',
-              maxWidth: '480px',
-              width: '100%',
-              minHeight: '750px',
-              aspectRatio: 'unset',
-              position: 'relative',
-              overflow: 'hidden',
-            }}
-          >
-            {/* Decorative Background Hearts */}
-            {[12, 85, 20, 78].map((left, i) => (
-              <Heart
-                key={i}
-                style={{
-                  position: 'absolute',
-                  left: `${left}%`,
-                  top: `${10 + i * 22}%`,
-                  width: '14px',
-                  height: '14px',
-                  color: '#7A0F1D',
-                  opacity: 0.12,
-                  zIndex: 0,
-                }}
-              />
-            ))}
-
-            {/* Header */}
-            <div style={{ textAlign: 'center', marginBottom: '60px', position: 'relative', zIndex: 1 }}>
-              <h2
-                style={{
-                  fontFamily: "'Great Vibes', cursive",
-                  fontSize: '52px',
-                  fontWeight: 400,
-                  color: '#7A0F1D',
-                  margin: '0 0 8px',
-                  letterSpacing: '1px',
-                }}
-              >
-                What Time?
-              </h2>
-              <div
-                style={{
-                  width: '60px',
-                  height: '1px',
-                  background: 'rgba(122, 15, 29, 0.3)',
-                  margin: '0 auto',
-                }}
-              />
-            </div>
-
-            {/* Creative Vertical Timeline */}
-            <div style={{ position: 'relative', padding: '20px 0', zIndex: 1 }}>
-              {/* Central Dashed Line */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '20px',
-                  bottom: '20px',
-                  left: '50%',
-                  width: '2px',
-                  transform: 'translateX(-50%)',
-                  borderLeft: '2px dashed rgba(122, 15, 29, 0.3)',
-                  zIndex: 0,
-                }}
-              />
-
-              {[
-                { item: programItems[0], icon: glassIconImg, fallbackTime: '8:30 PM' },
-                { item: programItems[1], icon: ringsIconImg, fallbackTime: '9:30 PM' },
-                { item: programItems[2], icon: bucketIconImg, fallbackTime: '10:00 PM' },
-              ].map((data, index) => {
-                const isEven = index % 2 === 0;
-                const timeText = data.item?.time || data.fallbackTime;
-                const titleText = data.item?.title || '';
-                const descText = data.item?.desc || '';
-
-                return (
-                  <div
-                    key={index}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginBottom: '65px',
-                      position: 'relative',
-                      zIndex: 1,
-                    }}
-                  >
-                    {/* Left Side */}
-                    <div
-                      style={{
-                        width: '42%',
-                        textAlign: isEven ? 'right' : 'center',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: isEven ? 'flex-end' : 'center',
-                      }}
-                    >
-                      {isEven ? (
-                        <div>
-                          <span
-                            style={{
-                              fontFamily: "'Playfair Display', serif",
-                              fontSize: '26px',
-                              fontWeight: 700,
-                              color: '#7A0F1D',
-                              lineHeight: 1.2,
-                              display: 'block',
-                            }}
-                          >
-                            {timeText}
-                          </span>
-                          <h4
-                            style={{
-                              fontFamily: "'Montserrat', sans-serif",
-                              fontSize: '20px',
-                              fontWeight: 800,
-                              color: '#7A0F1D',
-                              margin: '6px 0 4px',
-                            }}
-                          >
-                            {titleText}
-                          </h4>
-                          <p
-                            style={{
-                              fontFamily: "'Cormorant Garamond', serif",
-                              fontSize: '18px',
-                              fontWeight: 500,
-                              color: '#7A0F1D',
-                              opacity: 0.85,
-                              margin: 0,
-                              lineHeight: 1.5,
-                            }}
-                          >
-                            {descText}
-                          </p>
-                        </div>
-                      ) : (
-                        <div
-                          style={{
-                            width: '70px',
-                            height: '70px',
-                            borderRadius: '50%',
-                            backgroundColor: 'rgba(122, 15, 29, 0.08)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '12px',
-                          }}
-                        >
-                          <img
-                            src={data.icon}
-                            alt=""
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'contain',
-                              filter: 'invert(13%) sepia(85%) saturate(3821%) hue-rotate(340deg) brightness(88%) contrast(98%)',
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Central Circle Node */}
-                    <div
-                      style={{
-                        width: '16px',
-                        height: '16px',
-                        borderRadius: '50%',
-                        backgroundColor: '#7A0F1D',
-                        border: '3px solid #FAF7F2',
-                        boxShadow: '0 0 0 3px rgba(122, 15, 29, 0.25)',
-                        flexShrink: 0,
-                      }}
-                    />
-
-                    {/* Right Side */}
-                    <div
-                      style={{
-                        width: '42%',
-                        textAlign: !isEven ? 'left' : 'center',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: !isEven ? 'flex-start' : 'center',
-                      }}
-                    >
-                      {!isEven ? (
-                        <div>
-                          <span
-                            style={{
-                              fontFamily: "'Playfair Display', serif",
-                              fontSize: '24px',
-                              fontWeight: 700,
-                              color: '#7A0F1D',
-                              lineHeight: 1.2,
-                              display: 'block',
-                            }}
-                          >
-                            {timeText}
-                          </span>
-                          <h4
-                            style={{
-                              fontFamily: "'Montserrat', sans-serif",
-                              fontSize: '26px',
-                              fontWeight: 600,
-                              color: '#7A0F1D',
-                              margin: '6px 0 4px',
-                            }}
-                          >
-                            {titleText}
-                          </h4>
-                          <p
-                            style={{
-                              fontFamily: "'Cormorant Garamond', serif",
-                              fontSize: '20px',
-                              color: '#7A0F1D',
-                              opacity: 0.85,
-                              margin: 0,
-                              lineHeight: 1.5,
-                            }}
-                          >
-                            {descText}
-                          </p>
-                        </div>
-                      ) : (
-                        <div
-                          style={{
-                            width: '70px',
-                            height: '70px',
-                            borderRadius: '50%',
-                            backgroundColor: 'rgba(122, 15, 29, 0.08)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '12px',
-                          }}
-                        >
-                          <img
-                            src={data.icon}
-                            alt=""
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'contain',
-                              filter: 'invert(13%) sepia(85%) saturate(3821%) hue-rotate(340deg) brightness(88%) contrast(98%)',
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </StationeryCard>
-        </section> 
-
-
-
-
-
-
-
-              {/* ── FINAL SECTION: Closing Note & RSVP ── */}
-<section
-  dir="ltr"
+      {/* FINAL SECTION — Ending */}
+      <footer
+  className="relative py-24 px-6 text-center z-10 bg-cover bg-center bg-no-repeat"
   style={{
-    position: 'relative',
-    backgroundImage: `url(${finalBgImage})`, // استخدم صورة القلوب الفاتحة هنا
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    padding: '100px 1.5rem',
-    textAlign: 'center',
-    overflow: 'hidden',
-    minHeight: '650px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundImage: `url(${footerBg})`,
   }}
 >
-  <Reveal>
-    <div
-      style={{
-        maxWidth: '520px',
-        margin: '0 auto',
-        padding: '50px 30px',
-        backgroundColor: 'rgba(255, 255, 255, 0.65)',
-        backdropFilter: 'blur(8px)',
-        borderRadius: '16px',
-        border: '1px solid rgba(122, 15, 29, 0.15)',
-        boxShadow: '0 20px 40px rgba(122, 15, 29, 0.08)',
-        position: 'relative',
-        zIndex: 2,
-      }}
-    >
-      {/* Decorative Icon Header */}
-      <div
-        style={{
-          width: '50px',
-          height: '50px',
-          borderRadius: '50%',
-          backgroundColor: 'rgba(122, 15, 29, 0.08)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '0 auto 24px',
-        }}
-      >
-        <Heart style={{ width: '24px', height: '24px', color: '#7A0F1D', fill: '#7A0F1D' }} />
-      </div>
+  {/* تظليل خفيف عشان النص يبان أوضح فوق الخلفية */}
+  <div className="absolute inset-0 bg-white/50 pointer-events-none" />
 
-      {/* Main Closing Title */}
-      <h2
-        style={{
-          fontFamily: "'Great Vibes', cursive",
-          fontSize: 'clamp(42px, 6vw, 56px)',
-          fontWeight: 400,
-          color: '#7A0F1D',
-          margin: '0 0 16px',
-          lineHeight: 1.2,
-        }}
-      >
-        We Can't Wait!
-      </h2>
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 1 }}
+    className="relative z-10 max-w-xl mx-auto space-y-6"
+  >
+    <p className="text-sm text-[#8C7A78] font-light font-['Tajawal']">
+      وهكذا بدأت أجمل حكاياتنا...
+    </p>
 
-      {/* Warm Heartfelt Message */}
-      <p
-        style={{
-          fontFamily: bodyFont || "'Cormorant Garamond', serif",
-          fontSize: '1.25rem',
-          lineHeight: 1.8,
-          color: '#5A121B',
-          margin: '0 0 32px',
-          fontWeight: 500,
-        }}
-      >
-        Your presence is the greatest gift of all as we begin this beautiful new chapter together.
-        Thank you for being a part of our story and making our special day truly unforgettable.
-      </p>
+    <h2 className="text-4xl font-['Aref_Ruqaa'] text-[#BE5E68]">
+      دهب
+    </h2>
 
-      {/* Divider Accent */}
-      <div
-        style={{
-          width: '80px',
-          height: '1px',
-          background: 'linear-gradient(90deg, transparent, #7A0F1D, transparent)',
-          margin: '0 auto 32px',
-        }}
-      />
+    <p className="text-xs text-[#A89896] font-['Tajawal'] ">
+      27 أغسطس 2026
+    </p>
 
-      {/* Monogram / Signature */}
-      <p
-        style={{
-          fontFamily: "'Playfair Display', serif",
-          fontSize: '1.4rem',
-          fontWeight: 600,
-          color: '#7A0F1D',
-          letterSpacing: '2px',
-          margin: 0,
-          textTransform: 'uppercase',
-        }}
-      >
-        See You Soon!
-      </p>
-    </div>
-  </Reveal>
-</section>
+    <p className="text-sm text-[#7D6B69] italic pt-4 font-['Tajawal']">
+      اللهم احفظها لنا واجعلها من أسعد خلقك.
+    </p>
+
+  
+  </motion.div>
+</footer>
 
 
 
-
-
+<style>{`
+    @keyframes fall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 0.4; }
+      100% { transform: translateY(135%) rotate(360deg); opacity: 0; }
+    }
+`}</style>
 
     </div>
   );
-};
-
-export default HomePage;
-
+}
