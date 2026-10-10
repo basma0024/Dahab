@@ -504,7 +504,7 @@ export default function HomePage() {
           <h2 className="font-script text-6xl text-[#BE5E68]">Reem</h2>
 
           <p className="font-body text-xs text-[#A89896] tracking-widest uppercase">
-            August 27, 2026
+            October 10, 2026
           </p>
 
           <p className="font-display italic text-sm text-[#7D6B69] pt-4">
