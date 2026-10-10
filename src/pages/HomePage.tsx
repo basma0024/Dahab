@@ -202,100 +202,7 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* SECTION 3 — Message + Polaroids */}
-      <section
-        className="relative min-h-screen flex flex-col items-center justify-center bg-[#FDFBF8] bg-cover bg-center"
-        style={{ backgroundImage: `url(${bg})` }}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="relative z-10 w-full max-w-sm mx-auto flex flex-col items-center px-6 pt-10 pb-8"
-        >
-          <motion.h1
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
-            className="font-display italic text-3xl md:text-4xl text-[#be5e68] mb-6 text-center"
-          >
-            Our Beloved Little One
-          </motion.h1>
-
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.45, ease: "easeOut" }}
-            className="font-body text-base md:text-lg text-[#be5e68df] font-medium leading-relaxed text-center mb-10"
-          >
-            <p>
-              We never knew a heart could hold this much love, until you came along...
-              We pray that God keeps you safe for us, makes your days ahead more beautiful
-              than we could ever wish, and lets us watch you grow before our eyes, year after year.
-            </p>
-          </motion.div>
-
-          {/* Polaroids */}
-          <div className="relative w-full h-80 md:h-96 flex items-center justify-center mb-6">
-            {polaroids.map((p, i) => (
-              <div
-                key={i}
-                style={{
-                  position: "absolute",
-                  left: `${50 + (i - 1) * 34}%`,
-                  transform: "translateX(-50%)",
-                }}
-              >
-                <motion.div
-                  initial={{ opacity: 0, y: 40, rotate: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, y: 0, rotate: p.rotate, scale: 1 }}
-                  transition={{ duration: 0.8, delay: 0.9 + i * 0.25, ease: "easeOut" }}
-                  whileHover={{ scale: 1.06, rotate: 0, zIndex: 10 }}
-                  className="bg-white p-2.5 pb-6 rounded-[4px] shadow-[0_6px_20px_rgba(0,0,0,0.15)] w-44 md:w-52"
-                >
-                  <div className="w-full aspect-[3/4] overflow-hidden rounded-[2px]">
-                    <img src={p.src} alt="Reem" className="w-full h-full object-cover" />
-                  </div>
-                </motion.div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </section>
-
-      {/* SECTION 4 — Prayer */}
-      <section
-        className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-16 overflow-hidden bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${pinkBgImg})` }}
-      >
-        <div className="absolute inset-0 bg-white/20 pointer-events-none" />
-
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.3, ease: "easeOut" }}
-          className="relative z-10 w-full max-w-md mx-auto flex flex-col items-center justify-center"
-        >
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, delay: 0.3, ease: "easeOut" }}
-            className="font-script text-3xl md:text-4xl text-[#9B5B6B] leading-relaxed drop-shadow-[0_2px_6px_rgba(255,255,255,0.6)]"
-          >
-            May God let her grow beautifully,
-            <br />
-            keep her under His watchful eye,
-            <br />
-            make her the joy of our hearts,
-            <br />
-            and bless her with a lovely life,
-            <br />
-            a peaceful heart, and all that is good.
-          </motion.p>
-        </motion.div>
-      </section>
-
-      {/* SECTION 5 — Sebou' Celebration + Countdown */}
+  {/* SECTION 5 — Sebou' Celebration + Countdown */}
       <section className="relative z-10 py-24 px-6 bg-gradient-to-b from-[#FDF6F7] to-[#F8E6EA] overflow-hidden">
         <div className="max-w-md mx-auto text-center">
           <motion.div
@@ -305,9 +212,9 @@ export default function HomePage() {
             transition={{ duration: 0.9, ease: "easeOut" }}
             className="space-y-3 mb-10"
           >
-            <p className="font-body text-xs font-semibold text-[#B0677A] tracking-[0.3em] uppercase">
+            {/* <p className="font-body text-xs font-semibold text-[#B0677A] tracking-[0.3em] uppercase">
               You're Invited
-            </p>
+            </p> */}
             <h2 className="font-script text-5xl md:text-6xl text-[#BE5E68] leading-tight">
               Reem's Sebou'
             </h2>
@@ -402,6 +309,102 @@ export default function HomePage() {
         </div>
       </section>
 
+
+
+      {/* SECTION 3 — Message + Polaroids */}
+      <section
+        className="relative min-h-screen flex flex-col items-center justify-center bg-[#FDFBF8] bg-cover bg-center"
+        style={{ backgroundImage: `url(${bg})` }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="relative z-10 w-full max-w-sm mx-auto flex flex-col items-center px-6 pt-10 pb-8"
+        >
+          <motion.h1
+            initial={{ opacity: 0, y: -15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
+            className="font-display italic text-3xl md:text-4xl text-[#be5e68] mb-6 text-center"
+          >
+            Our Beloved Little One
+          </motion.h1>
+
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.45, ease: "easeOut" }}
+            className="font-body text-base md:text-lg text-[#be5e68df] font-medium leading-relaxed text-center mb-10"
+          >
+            <p>
+              We never knew a heart could hold this much love, until you came along...
+              We pray that God keeps you safe for us, makes your days ahead more beautiful
+              than we could ever wish, and lets us watch you grow before our eyes, year after year.
+            </p>
+          </motion.div>
+
+          {/* Polaroids */}
+          <div className="relative w-full h-80 md:h-96 flex items-center justify-center mb-6">
+            {polaroids.map((p, i) => (
+              <div
+                key={i}
+                style={{
+                  position: "absolute",
+                  left: `${50 + (i - 1) * 34}%`,
+                  transform: "translateX(-50%)",
+                }}
+              >
+                <motion.div
+                  initial={{ opacity: 0, y: 40, rotate: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, y: 0, rotate: p.rotate, scale: 1 }}
+                  transition={{ duration: 0.8, delay: 0.9 + i * 0.25, ease: "easeOut" }}
+                  whileHover={{ scale: 1.06, rotate: 0, zIndex: 10 }}
+                  className="bg-white p-2.5 pb-6 rounded-[4px] shadow-[0_6px_20px_rgba(0,0,0,0.15)] w-44 md:w-52"
+                >
+                  <div className="w-full aspect-[3/4] overflow-hidden rounded-[2px]">
+                    <img src={p.src} alt="Reem" className="w-full h-full object-cover" />
+                  </div>
+                </motion.div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      {/* SECTION 4 — Prayer */}
+      <section
+        className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-16 overflow-hidden bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${pinkBgImg})` }}
+      >
+        <div className="absolute inset-0 bg-white/20 pointer-events-none" />
+
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.3, ease: "easeOut" }}
+          className="relative z-10 w-full max-w-md mx-auto flex flex-col items-center justify-center"
+        >
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.1, delay: 0.3, ease: "easeOut" }}
+            className="font-script text-3xl md:text-4xl text-[#9B5B6B] leading-relaxed drop-shadow-[0_2px_6px_rgba(255,255,255,0.6)]"
+          >
+            May God let her grow beautifully,
+            <br />
+            keep her under His watchful eye,
+            <br />
+            make her the joy of our hearts,
+            <br />
+            and bless her with a lovely life,
+            <br />
+            a peaceful heart, and all that is good.
+          </motion.p>
+        </motion.div>
+      </section>
+
+    
       {/* SECTION 6 — Wishes form */}
       <section className="py-24 px-6 bg-[#FDF6F7] z-10 relative">
         <div className="max-w-3xl mx-auto space-y-8">
